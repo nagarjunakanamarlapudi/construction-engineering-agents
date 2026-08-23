@@ -8,14 +8,12 @@ import hashlib
 import html
 import json
 import re
-import shutil
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import quote_plus, urljoin
+from urllib.parse import quote_plus, urljoin, urlparse
 from urllib.request import Request, urlopen
-
 
 BIS_BASE_URL = "https://standardsbis.bsbedge.com/"
 SEARCH_URL = BIS_BASE_URL + "BIS_SearchStandard.aspx?Standard_Number={query}&id=0"
@@ -31,7 +29,16 @@ class VisibleTextParser(HTMLParser):
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         if tag.lower() in {"script", "style", "noscript"}:
             self.ignored_depth += 1
-        elif self.ignored_depth == 0 and tag.lower() in {"p", "br", "div", "tr", "li", "h1", "h2", "h3"}:
+        elif self.ignored_depth == 0 and tag.lower() in {
+            "p",
+            "br",
+            "div",
+            "tr",
+            "li",
+            "h1",
+            "h2",
+            "h3",
+        }:
             self.parts.append("\n")
 
     def handle_endtag(self, tag: str) -> None:
@@ -77,12 +84,21 @@ def parse_search_entries(document: str) -> list[dict[str, str]]:
             continue
         title = first_match(r'<span[^>]*class=["\']standard-title["\'][^>]*>(.*?)</span>', block)
         if not title:
-            title = first_match(r'<span[^>]*style=["\'][^"\']*font-size\s*:\s*15px[^"\']*["\'][^>]*>(.*?)</span>', block)
-        status = first_match(r'<span[^>]*id=["\'][^"\']*lblstatus[^"\']*["\'][^>]*>(.*?)</span>', block)
+            title = first_match(
+                r'<span[^>]*style=["\'][^"\']*font-size\s*:\s*15px[^"\']*["\'][^>]*>(.*?)</span>',
+                block,
+            )
+        status = first_match(
+            r'<span[^>]*id=["\'][^"\']*lblstatus[^"\']*["\'][^>]*>(.*?)</span>', block
+        )
         reaffirmed = first_match(r'<span[^>]*id=["\'][^"\']*lblreaff["\'][^>]*>(.*?)</span>', block)
-        committee_match = re.search(r"Technical Committee\s*:\s*</span>\s*([^<\r\n]+)", block, flags=re.IGNORECASE)
+        committee_match = re.search(
+            r"Technical Committee\s*:\s*</span>\s*([^<\r\n]+)", block, flags=re.IGNORECASE
+        )
         committee = re.sub(r"\s+", " ", committee_match.group(1)).strip() if committee_match else ""
-        amendment_count = first_match(r'<a[^>]*id=["\'][^"\']*noanmds[^"\']*["\'][^>]*>(.*?)</a>', block)
+        amendment_count = first_match(
+            r'<a[^>]*id=["\'][^"\']*noanmds[^"\']*["\'][^>]*>(.*?)</a>', block
+        )
         entries.append(
             {
                 "preview_id": preview_id,
@@ -113,13 +129,18 @@ def chunk_text(text: str, maximum_words: int = 220, overlap_words: int = 30) -> 
 
 
 def fetch_bytes(url: str) -> bytes:
-    request = Request(url, headers={"User-Agent": USER_AGENT})
-    with urlopen(request, timeout=45) as response:
+    parsed = urlparse(url)
+    if parsed.scheme != "https" or parsed.hostname != "standardsbis.bsbedge.com":
+        raise ValueError(f"Refusing non-BIS or non-HTTPS URL: {url}")
+    request = Request(url, headers={"User-Agent": USER_AGENT})  # noqa: S310
+    with urlopen(request, timeout=45) as response:  # noqa: S310
         return response.read()
 
 
 def write_jsonl(path: Path, records: list[dict[str, object]]) -> None:
-    serialized = "".join(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n" for record in records)
+    serialized = "".join(
+        json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n" for record in records
+    )
     path.write_text(serialized, encoding="utf-8")
 
 
@@ -131,7 +152,7 @@ def build_index(sources_path: Path, output_dir: Path, fixture_dir: Path | None) 
 
     manifest: list[dict[str, object]] = []
     index: list[dict[str, object]] = []
-    retrieved_at = datetime.now(timezone.utc).isoformat()
+    retrieved_at = datetime.now(UTC).isoformat()
 
     for family in sources:
         family_id = family["family_id"]
@@ -147,7 +168,9 @@ def build_index(sources_path: Path, output_dir: Path, fixture_dir: Path | None) 
             (raw_dir / f"{family_id}-search.html").write_bytes(search_bytes)
 
         matching_entries = [
-            entry for entry in parse_search_entries(search_document) if designation_pattern.search(entry["designation"])
+            entry
+            for entry in parse_search_entries(search_document)
+            if designation_pattern.search(entry["designation"])
         ]
         if not matching_entries:
             raise ValueError(f"No matching BIS entry for configured family {family_id}")
@@ -231,11 +254,15 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     arguments = parse_args()
     try:
-        source_count, chunk_count = build_index(arguments.sources, arguments.output_dir, arguments.fixture_dir)
+        source_count, chunk_count = build_index(
+            arguments.sources, arguments.output_dir, arguments.fixture_dir
+        )
     except ValueError as error:
         print(str(error), file=sys.stderr)
         return 2
-    print(json.dumps({"indexed_sources": source_count, "indexed_chunks": chunk_count}, sort_keys=True))
+    print(
+        json.dumps({"indexed_sources": source_count, "indexed_chunks": chunk_count}, sort_keys=True)
+    )
     return 0
 
 

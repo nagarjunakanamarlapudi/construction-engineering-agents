@@ -1,0 +1,97 @@
+[
+  {
+    "expected_evidence_ids": [
+      "RFI-087"
+    ],
+    "expected_route": "rag",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "explanation": "One targeted retrieval answers this exact-ID question.",
+    "question": "What did RFI-087 decide, and which drawing revision contains the decision?",
+    "scenario_id": "S-01",
+    "title": "Exact record lookup"
+  },
+  {
+    "expected_evidence_ids": [
+      "CODE-REGISTER-001",
+      "CODE-IS-800",
+      "CODE-IS-2062"
+    ],
+    "expected_route": "rag",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "explanation": "The answer must distinguish the synthetic code register from public BIS previews.",
+    "question": "Which project code entries govern structural steel design and material grade?",
+    "scenario_id": "S-02",
+    "title": "Indian standard scope"
+  },
+  {
+    "expected_evidence_ids": [
+      "RFI-087",
+      "DRAW-S-204-R5",
+      "ACT-STEEL-009"
+    ],
+    "expected_route": "graph_rag",
+    "expected_tools": [
+      "find_graph_paths",
+      "get_records"
+    ],
+    "explanation": "The project graph follows the RFI-to-drawing-to-activity path.",
+    "question": "What is downstream of RFI-087 if its decision is not implemented?",
+    "scenario_id": "S-03",
+    "title": "Downstream impact"
+  },
+  {
+    "expected_evidence_ids": [
+      "ACT-STEEL-009",
+      "RFI-087",
+      "DRAW-S-204-R3",
+      "DRAW-S-204-R5"
+    ],
+    "expected_route": "agentic_rag",
+    "expected_tools": [
+      "get_schedule_activity",
+      "find_graph_paths",
+      "compare_revisions"
+    ],
+    "explanation": "The agent decomposes schedule, relationship, and revision checks.",
+    "question": "Why was activity ACT-STEEL-009 blocked, what changed, and what evidence closes the issue?",
+    "scenario_id": "S-04",
+    "title": "Delay investigation"
+  },
+  {
+    "expected_evidence_ids": [
+      "PIECE-C001",
+      "MTC-01-01",
+      "PO-STEEL-001",
+      "HANDOVER-STEEL-01"
+    ],
+    "expected_route": "graph_rag",
+    "expected_tools": [
+      "find_graph_paths",
+      "get_records"
+    ],
+    "explanation": "Graph traversal assembles the material-to-piece evidence chain.",
+    "question": "Trace PIECE-C001 from purchase order and mill certificate to installation and handover.",
+    "scenario_id": "S-05",
+    "title": "Material traceability"
+  },
+  {
+    "expected_evidence_ids": [
+      "NCR-005",
+      "NCR-006"
+    ],
+    "expected_route": "agentic_rag",
+    "expected_tools": [
+      "query_quality_records",
+      "find_graph_paths",
+      "get_records"
+    ],
+    "explanation": "The agent combines status filtering with inspection-to-NCR paths.",
+    "question": "Which weld inspections raised NCRs, and which remain open pending reinspection?",
+    "scenario_id": "S-06",
+    "title": "Quality closure investigation"
+  }
+]

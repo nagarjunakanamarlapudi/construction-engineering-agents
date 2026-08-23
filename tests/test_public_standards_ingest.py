@@ -5,7 +5,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = REPO_ROOT / "scripts" / "build_public_standards_index.py"
 
@@ -104,7 +103,9 @@ class PublicStandardsIngestTest(unittest.TestCase):
             self.assertIn("hot rolled steel sections", combined_text)
             self.assertNotIn("ignored script text", combined_text)
             self.assertNotIn("IS 8000", combined_text)
-            self.assertTrue(all(chunk["source_url"].endswith("BIS_Preview.aspx?id=800") for chunk in chunks))
+            self.assertTrue(
+                all(chunk["source_url"].endswith("BIS_Preview.aspx?id=800") for chunk in chunks)
+            )
 
     def test_fails_when_a_configured_family_has_no_matching_bis_entry(self):
         self.assertTrue(SCRIPT.exists(), "public standards ingest script is missing")
