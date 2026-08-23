@@ -1,0 +1,1648 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="">
+<head id="ctl00_Head1"><link rel="icon" type="image/png" href="favicon.png" />
+   
+  <script type="text/javascript">
+      //function validateKeydown(event) {
+      //    // Define the allowed regex pattern
+      //    var regex = /^[a-zA-Z0-9\-:\.+&= (),;]+$/;
+
+      //    // Get the character from the event
+      //    var char = String.fromCharCode(event.which);
+
+      //    // Allow control keys: Backspace (8), Tab (9), Delete (46), Arrow keys (37-40), Home (36), End (35)
+      //    var controlKeys = [8, 9, 46, 37, 38, 39, 40, 36, 35];
+
+      //    // Check if the key is a control key
+      //    if (controlKeys.indexOf(event.keyCode) !== -1) {
+      //        return; // Allow control keys
+      //    }
+
+      //    // Check if the character matches the regex pattern
+      //    if (!regex.test(char)) {
+      //        // If the character does not match, prevent the default action
+      //        event.preventDefault();
+      //    }
+      //}
+
+      function validateKeydown(event) {
+          // Allow control keys
+          const controlKeys = [
+              'Backspace', 'Tab', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'
+          ];
+          if (controlKeys.includes(event.key)) {
+              return; // Allow control keys
+          }
+
+          // Define allowed characters
+          const regex = /^[a-zA-Z0-9\-:.\+&= (),;\/]$/;
+
+          // If the key is not a single allowed character, block it
+          if (!regex.test(event.key)) {
+              event.preventDefault();
+          }
+      }
+
+      //function handlePaste(event) {
+      //    // Define the allowed regex pattern
+      //    var regex = /[^a-zA-Z0-9\-:\.+&= (),;]/g;
+
+      //    // Get the pasted data
+      //    var pasteData = event.clipboardData.getData('text');
+
+      //    // Remove disallowed characters
+      //    var cleanedData = pasteData.replace(regex, '');
+
+      //    // Prevent the default paste behavior
+      //    event.preventDefault();
+
+      //    // Insert the cleaned data
+      //    var textBox = event.target;
+      //    var start = textBox.selectionStart;
+      //    var end = textBox.selectionEnd;
+
+      //    // Set the new value of the input
+      //    textBox.value = textBox.value.slice(0, start) + cleanedData + textBox.value.slice(end);
+
+      //    // Set the new cursor position
+      //    textBox.selectionStart = textBox.selectionEnd = start + cleanedData.length;
+      //}
+      function handlePaste(event) {
+          // Define the disallowed characters using a negated character class
+          var regex = /[^a-zA-Z0-9\-:.\+&= (),;]/g;
+
+          // Get the pasted text
+          var pasteData = event.clipboardData.getData('text');
+
+          // Remove characters that do not match the allowed set
+          var cleanedData = pasteData.replace(regex, '');
+
+          // Prevent the original paste action
+          event.preventDefault();
+
+          // Insert the cleaned data at the current cursor position
+          var textBox = event.target;
+          var start = textBox.selectionStart;
+          var end = textBox.selectionEnd;
+
+          // Set the new value
+          textBox.value = textBox.value.slice(0, start) + cleanedData + textBox.value.slice(end);
+
+          // Move the cursor to the end of the inserted text
+          textBox.selectionStart = textBox.selectionEnd = start + cleanedData.length;
+      }
+
+  </script>
+    <script>
+        // When the user scrolls the page, execute myFunction 
+        window.onscroll = function () { myFunction() };
+
+        function myFunction() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            // document.getElementById("myBar").style.width = scrolled + "%";
+            var bar = document.getElementById("myBar");
+            if (!bar) return;
+
+            bar.style.width = scrolled + "%";
+        }
+
+
+
+    </script>
+    <script src="/js/sweetalert.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function Redirectotohome(ssurl, stext, stitle, sicon) {
+            swal({
+                title: stitle,
+                text: stext,
+                icon: sicon,
+                // buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location.href = ssurl;
+                        //swal("Poof! Your imaginary file has been deleted!", {icon: "success",});
+                    } else {
+                        window.location.href = ssurl//'home.aspx';
+                        //swal("Your imaginary file is safe!");
+                        // window.location.href = 'login.html';
+                    }
+                });
+        }
+    </script>
+    <script type="text/javascript">
+        function JSalert() {
+            swal("Please enter the criteria for searching!", "", "info");
+            //swal("Please fill in either Standard Number or Title/Scope/Keyword.");
+        }
+    </script>
+    <script type="text/javascript">
+        function msg() {
+            swal(arguments[0], arguments[1], arguments[2]);
+            return swal;
+        }
+    </script>
+    <script type="text/javascript">
+        function YourMethodHere(source, eventArgs) {
+            //alert("sss");
+            $("#search1_btn").trigger("click");
+        }
+
+
+
+        function Employees_Populated(sender, e) {
+            var employees = sender.get_completionList().childNodes;
+            var div = "<table>";
+            div += "<tr><th>EmployeeId</th><th>FirstName</th><th>LastName</th><th>City</th><th>Country</th></tr>";
+            for (var i = 0; i < employees.length; i++) {
+
+                div += "<tr><td>" + employees[i].innerHTML.split('-')[0] + "</td><td>" + employees[i].innerHTML.split('-')[1] + "</td><td>" + employees[i].innerHTML.split('-')[2] + "</td><td>" + employees[i].innerHTML.split('-')[3] + "</td><td>" + employees[i].innerHTML.split('-')[4] + "</td></tr>";
+            }
+            div += "</table>";
+            alert(employees);
+        }
+        function GetID(source, eventArgs) {
+            var HdnKey = eventArgs.get_value();
+            var HdnKey1 = eventArgs.get_text();
+            // alert(HdnKey);
+            window.location.href = '/BIS_searchstandard.aspx?' + HdnKey; //relative to domain
+            //setTimeout(function () {
+            //    window.location.href = '/BIS_searchstandard.aspx?' + HdnKey;
+            //}, 100);
+        }
+    </script>
+    <script type ="text/javascript" >
+        // When the user scrolls the page, execute myFunction 
+        window.onscroll = function () { myFunction() };
+
+        function myFunction() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("myBar").style.width = scrolled + "%";
+        }
+    </script>
+    <title>
+	Bureau of Indian Standards - e-Sale Search Result
+</title><meta name="description" content="Search Result for is 4000" /><meta name="keywords" content="Indian standards, download pdf, BIS, BSB EDGE, e-sale, search standards, is 4000" /><meta name="viewport" content="width=device-width, initial-scale=1" /><link href="css/dynamic.css" rel="stylesheet" type="text/css" /><link href="css/animate.css" rel="stylesheet" type="text/css" /><link href="css/colorbox.css" rel="stylesheet" type="text/css" /><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" /><link href="css/easy-responsive-tabs.css" rel="stylesheet" type="text/css" /><link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" /><link href="css/responsive.css" rel="stylesheet" type="text/css" /><link href="css/owl.carousel.css" rel="stylesheet" type="text/css" /><link href="css/owl.theme.css" rel="stylesheet" type="text/css" /><link href="https://fonts.googleapis.com/css?family=Prompt:400,300,200,500,600,700|Lato:400,300,700" rel="stylesheet" type="text/css" /><link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet" /><link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,900" rel="stylesheet" /><link href="css/dynamic.css" rel="stylesheet" type="text/css" /><link href="css/style_BIS.css" rel="stylesheet" type="text/css" />
+    
+    <script src="../js/jquery.2.1.4.min.js"></script>
+    
+    <meta name="google-site-verification" content="8CfMsJv-LATi13tsKg2LacWII3dqdO-4NEnFssa9g54" />
+    <script src="Scripts/text_clear_search.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function BindEvents() {
+
+            $(document).ready(function () {
+
+                $(".bis_faq").fancybox({
+                    type: "iframe",
+                    iframe: {
+                        css: {
+                            width: '90%',
+                            height: '90%'
+                        }
+                    }
+                });
+
+                $(".bis_credit1").fancybox({
+                    type: "iframe",
+                    iframe: {
+                        css: {
+                            width: '70%'
+                        }
+                    },
+                    afterShow: function (instance, current) {
+                        var iframe = current.$iframe;
+                        iframe.on("load", function () {
+                            try {
+                                var bodyHeight = iframe.contents().find("body").height();
+                                iframe.height(bodyHeight + 30);
+                            } catch (e) { }
+                        });
+                    }
+                });
+
+                $(".bis_credit2").fancybox({
+                    type: "iframe",
+                    iframe: {
+                        css: {
+                            width: '70%',
+                            height: '70%'
+                        }
+                    }
+                });
+
+                $(".bis_customer_feedback").fancybox({
+                    type: "iframe",
+                    iframe: {
+                        css: {
+                            width: '70%',
+                            height: '70%'
+                        }
+                    }
+                });
+
+                $(".bis_fop").fancybox({
+                    type: "iframe",
+                    iframe: {
+                        css: {
+                            width: '70%'
+                        }
+                    },
+                    afterShow: function (instance, current) {
+                        var iframe = current.$iframe;
+                        iframe.on("load", function () {
+                            try {
+                                var bodyHeight = iframe.contents().find("body").height();
+                                iframe.height(bodyHeight + 30);
+                            } catch (e) { }
+                        });
+                    }
+                });
+
+                $(".bis_sitemap").fancybox({
+                    type: "iframe",
+                    iframe: {
+                        css: {
+                            width: '50%',
+                            height: '65%'
+                        }
+                    }
+                });
+
+            });
+        }
+    </script>
+    
+    
+    <style>
+        .progress-container
+        {
+            width: 100%;
+            height: 3px;
+            background: #fff;
+        }
+        
+        .progress-bar
+        {
+            height: 3px;
+            background: #c52327;
+            width: 0%;
+        }
+        
+        .scroll_indicator
+        {
+            position: fixed;
+            top: 0;
+            z-index: 1;
+            width: 100%;
+            background-color: #f1f1f1;
+        }
+        .gap-for-scroll-indicator
+        {
+            height: 2px;
+            width: 100%;
+            background: #fff;
+            z-index: 999;
+        }
+        
+        
+        .AutoExtender
+        {
+            font-family: Verdana, Helvetica, sans-serif !important;
+            font-size: .8em !important;
+            margin: 0px !important;
+            top: 175px !important;
+            z-index: 1001 !important;
+            font-weight: normal !important;
+            border: 1px solid #CCCCCC !important;
+            line-height: 20px !important;
+            padding: 0px !important;
+            background-color: White !important;
+            list-style: none !important;
+            max-height: 440px !important;
+            overflow: auto !important;
+            overflow-x: hidden !important;
+            display: inline-block !important;
+        }
+        .AutoExtenderList
+        {
+            border: 0px solid #CCCCCC !important;
+            border-bottom: 0.1px solid #006699 !important;
+            cursor: pointer !important;
+            color: #000000 !important;
+            margin: 0px !important;
+            border-color: #CCCCCC !important;
+            list-style: none !important;
+            margin-left: 4px !important;
+            width: 100% !important;
+        }
+        .AutoExtenderList ul li
+        {
+            background-color: red !important;
+        }
+        .AutoExtenderHighlight
+        {
+            color: White !important;
+            font-size: 1.2em !important;
+            background-color: #DF0000 !important;
+            cursor: pointer !important;
+            margin: 0px !important;
+            margin-left: 3px !important;
+            width: 100% !important;
+        }
+        
+        
+        
+        .advance_btn
+        {
+            color: #fff;
+            padding: 0;
+            border-bottom: 1px solid #ddd;
+            line-height: 30px;
+            font-weight: 500;
+        }
+        
+        
+        @media screen and (max-width: 200px)
+        {
+            .sticky_bis
+            {
+                top: 100px !important;
+            }
+        }
+        
+        @media screen and (max-width: 400px)
+        {
+            .sticky_bis
+            {
+                top: 120px !important;
+            }
+        }
+        
+        
+        @media screen and (max-width: 600px)
+        {
+            .bsb_img1
+            {
+                width: 100% !important;
+            }
+        
+            .bis_img1
+            {
+                width: 100% !important;
+                margin-bottom: 25px !important;
+                margin-top: 10px !important;
+            }
+        
+            .bis_img1 a
+            {
+                float: left !important;
+            }
+        
+            .sticky_bis
+            {
+                top: 180px !important;
+            }
+        
+        
+            .bisbsb_main
+            {
+                display: grid !important;
+            }
+        
+            .bisbsb_main_part1
+            {
+                width: 100% !important;
+                float: none;
+            }
+        
+            .bisbsb_main_part2
+            {
+                width: 100% !important;
+                float: none;
+            }
+        
+            .login-create ul
+            {
+                text-align: left !important;
+            }
+        
+            .li_1
+            {
+                width: 100% !important;
+                text-align: left !important;
+            }
+        
+            .li_3
+            {
+                width: 100% !important;
+                text-align: left !important;
+                display: grid !important;
+            }
+        
+            .txtbx_li_3
+            {
+                width: 100% !important;
+            }
+        
+        }
+        
+        @media only screen and (max-width: 768px)
+        {
+            .bsb_img1
+            {
+                width: 100% !important;
+            }
+        
+            .bis_img1
+            {
+                width: 100% !important;
+                margin-bottom: 25px !important;
+                margin-top: 10px !important;
+            }
+        
+            .bis_img1 a
+            {
+                float: left !important;
+            }
+        
+            .sticky_bis
+            {
+                top: 210px !important;
+            }
+        
+            .bisbsb_main
+            {
+                display: grid !important;
+            }
+        
+            .bisbsb_main_part1
+            {
+                width: 100% !important;
+                float: none;
+            }
+        
+            .bisbsb_main_part2
+            {
+                width: 100% !important;
+                float: none;
+            }
+        
+            .login-create ul
+            {
+                text-align: left !important;
+            }
+        
+            .li_1
+            {
+                width: 100% !important;
+                text-align: left !important;
+            }
+        
+            .li_3
+            {
+                width: 100% !important;
+                text-align: left !important;
+                display: grid !important;
+            }
+        
+            .txtbx_li_3
+            {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form name="aspnetForm" method="post" action="./BIS_SearchStandard.aspx?Standard_Number=IS+4000&amp;id=0" id="aspnetForm">
+<input type="hidden" name="_TSM_HiddenField_" id="_TSM_HiddenField_" value="2GFwlGU9ATlFIxrdsXRzcja58_1t5F8HSleaZM4ZQwk1" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+
+<script src="/ScriptResource.axd?d=2oNQuXkZQ1h_1_bV94bmwdoWf8-pWXc4sV53s4R1P9kjqf-_IrfY87WkWGCJyA_5a-ZF9MtzNzTSOjq2Gw4pEJqGOhbL3Vdt1UMJ0WddxnLBBwcSde8fIvC4TwFKBoX2Ube0DA2&amp;t=51e37521" type="text/javascript"></script>
+<script src="/BIS_SearchStandard.aspx?_TSM_CombinedScripts_=True&amp;v=2GFwlGU9ATlFIxrdsXRzcja58_1t5F8HSleaZM4ZQwk1&amp;_TSM_Bundles_=&amp;cdn=False" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=e69_vdH-NUm1O88Tlanc6KE0_0jyKCA3TUfu6wuRMH-7r3sA44YKOzBC1ox7IVVtYHT6LZQ1sKSzZYOR2Y8ZMc0L3-LG7N2IIvFYOcAFjvfnXnZvPBcy-i_JdIufNKp86sFwGzjo-6b8Vjf2Q8gc3RZNWMg1&amp;t=51e37521" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=DoqSclyIqrKVLvLx3Uqgbyv-hfW2KpgnxHGdIKj0D4lB7PCIG6EcgnNkxnxT0xL09pRCeEuT9jvV3YyLvFpNuOQmqneMvm3MXMMlCd3aJpkUxX67CedC0_2v2RE_D9SuSQwjDnFV7yth4T3FKLEKeDpIkHk1&amp;t=51e37521" type="text/javascript"></script>
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="69AE6FC5" />
+<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+    
+    <div class="wrapper" id="page">
+      
+        <script type="text/javascript">Sys.Application.add_load(BindEvents);</script>
+           
+
+            <div class="container header-top-cls">
+               
+                    <div class="col-md-3 col-md-offset-3 pull-rght-sec">
+                        <ul>
+                        <li><a href="../BIS_index.aspx">Home</a></li>
+                            <li><a href="../BIS_FAQ.aspx?id=sitemap"  class="bis_sitemap">Sitemap</a></li>
+                            <li><a href="../BIS_FAQ.aspx?id=feedback" class="bis_customer_feedback">Customer Feedback</a></li>
+                        </ul>
+                      </div>
+             </div> 
+                             <div class="container" style="margin-left:0; padding-top:10px !important; padding-bottom:10px !important; ">
+                       <div id="ctl00_UpdatePanel3">
+	
+                            <div class="row">
+                                
+                                <div class = "col-sm-3">
+                                 <a href="https://bis.gov.in/" target="_blank"><img src="/images/bis_home_logo.png" alt="Bureau of Indian Standardssss"/></a>
+                                 </div>
+                                  <div class = "col-sm-7">
+                                       <div class="login-create primary_login">
+                                                                            <ul>
+                                      
+                                                                           
+                                                
+                                                    <li style = "list-style: none; padding: 0 5px; color: #c52327; cursor: pointer; font-size: 17px;font-family: hind; font-weight: 600;">
+                                                        <a href="/BIS_Login" class="lgn_btn"><i class="fa fa-sign-in" aria-hidden="true"></i> Log In</a>  
+                                                      
+                                                      
+                                                        <a href="/BIS_Register" class="reg_btn"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register</a> 
+                                                     </li>
+                                                
+                                                
+                                          
+                                                <li style="background:transparent !important;"><a style="color:#000;" href="javascript:void(0)">
+                                                    <img src="/images/user-acc.png" alt="account" />
+                                                    My Account <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                                                    <ul style="background:#48505b !important;" >
+                                                        <li>
+                                                            <a id="ctl00_lnkbtnAccount" href="javascript:__doPostBack(&#39;ctl00$lnkbtnAccount&#39;,&#39;&#39;)">Account Details</a></li>
+                                                        <li><a href="/BIS_Orders">Orders</a></li>
+                                                        <li><a id="ctl00_wishlistclick" href="javascript:__doPostBack(&#39;ctl00$wishlistclick&#39;,&#39;&#39;)">Wish List (0) </a></li>
+                                                        
+                                                        <li id="ctl00_liforget">
+                                                            <a id="ctl00_lnkbtnforgetpassword" href="javascript:__doPostBack(&#39;ctl00$lnkbtnforgetpassword&#39;,&#39;&#39;)">Forgot Password</a></li>
+                                                        
+                                                        
+                                                    </ul>
+                                                </li>
+                                                <li style ="background:transparent;background-image : url(/images/shopping-cart.png);background-position : 18px 5px ;background-repeat : no-repeat;padding: 8px 9px 8px 34px;text-transform: uppercase;"><a id="ctl00_cartclick" style="color:#000; padding: 15px 0px 0px 20px;" href="javascript:__doPostBack(&#39;ctl00$cartclick&#39;,&#39;&#39;)"><span style="padding :1px 1px 1px 10px !important;" >
+                                                    0
+                                                </span>Cart</a> </li>
+                                                <li style="display: none"><a href="/wishlist.aspx?mpgid=25&pgidtrail=34" title="Wishlist">
+                                                    <span class="wishlist">
+                                                        0
+                                                    </span><i class="fa fa-heart" aria-hidden="true"></i></a></li>
+                                                     </ul> 
+                                                    </div>
+                                             
+                                                   
+                                           </div> 
+                                       
+                                  
+                                              <div class = "col-sm-2"><a href="../bis_index.aspx" style="float:right;">
+                                                 <img src="/images/bsbedge_home_Logo.png"  alt="Shop for International Standards"   title="Shop for International Standards" />
+                                            </a>
+                                        
+                                        </div> 
+                                       
+                                     </div>
+                                
+                                
+</div>  
+                                </div>
+                                <div class="container" style="margin-left:0; ">
+                                <div class = "row">
+                               <div class="search-block search_bar-explore" style = " background: #c6cbce !important;">
+                
+                <div id="ctl00_UpdatePanel2">
+	
+                        <input type="hidden" name="ctl00$HiddenID" id="ctl00_HiddenID" />
+                        <div id="ctl00_Panel1">
+		
+                            <ul>
+                               <li style = "text-align: right; width:17%; color:White;" class="li_1">
+                                    <span style = "color:#000; font-size:17px; display: block; ">Search Standard(s) on </span>  
+                                </li>   
+                                 <li text-align:left;" class="li_3">
+                                <input name="ctl00$txt_standardnumber" type="text" id="ctl00_txt_standardnumber" placeholder="Standard Number (e.g. IS 1)" class="txtbx_li_3" onkeydown="validateKeydown(event)" onpaste="handlePaste(event)" style="width:80%;" />
+                                    
+                                    
+                                    <a id="ctl00_btn_stdno" class="myLink" href="javascript:__doPostBack(&#39;ctl00$btn_stdno&#39;,&#39;&#39;)" style="background:#005ead !important;"><i class="fa fa-search"></i></a>
+                                </li>
+                               
+                            <li text-align:left;" class="li_3">
+                                <span style = "color:#000; font-size:17px; margin-left:0px !important; vertical-align: middle; margin-right: 10px; "> Or </span>
+                                 <input name="ctl00$TextBox1" type="text" id="ctl00_TextBox1" placeholder="Title" class="txtbx_li_3" onkeydown="validateKeydown(event)" onpaste="handlePaste(event)" style="width:80%;" />
+                               
+                                   
+                                 <a id="ctl00_btn" class="myLink" href="javascript:__doPostBack(&#39;ctl00$btn&#39;,&#39;&#39;)" style="background:#005ead !important;"><i class="fa fa-search"></i></a>
+                             </li>
+                                <li class="hide">
+                                   
+                                </li>
+                              
+
+                                
+                                <li class="hide">
+                                   
+                                </li>
+                                
+                                <li class="hide">
+                                    
+                                </li>
+                               
+                                <li style="background:#48505b !important;" >
+                                    <a href="#" class="toggle-link2 selected" > Advance Search</a>
+                                        <ul style="background:#48505b !important; z-index :999;"  >               
+                                        <li style="border-bottom:1px solid #48505b !important;" ><a href="/BIS_AdvanceSearch.aspx">Module</a></li>
+                                        <li style="border-bottom:1px solid #48505b !important;"><a href="/BIS_AdvanceSearch_Scope.aspx">Scope</a></li>
+                                        
+                                        <li style="border-bottom:1px solid #48505b !important;"><a href="/BIS_FreeAmendments.aspx?id=0">Free Amendments</a></li>
+                                        </ul>                                    
+                                </li>
+                            </ul>
+                        
+	</div>
+                    
+</div>
+                </div>
+                </div>
+            </div>
+                           
+                           
+      
+        
+        <div>
+                    
+    <script src="js/jquery.1.12.4.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ctl00_ContentPlaceHolder1_Tb1").keyup(function (e) {
+                if (e.keyCode != 8) {
+                    if ($(this).val().length == 2) {
+                        $(this).val($(this).val() + "/");
+                    } else if ($(this).val().length == 5) {
+                        $(this).val($(this).val() + "/");
+                    }
+                }
+            });
+        });
+    </script>
+
+      
+
+    <style>
+        .highlight
+        {
+            color:Yellow;
+        }
+        
+       
+    </style>
+
+
+    <style>
+        @media screen and (max-width: 600px)
+        {
+            .div-abc
+            {
+                width: 100% !important;
+                float: none;
+                height: auto !important;
+                text-align: left !important;
+                margin-bottom: 10px !important;
+                padding-top: 0px !important;
+            }
+        
+            .div-abc1
+            {
+                width: 100% !important;
+                float: none;
+                margin-bottom: 10px !important;
+            }
+        
+            .div-abc2
+            {
+                width: 100% !important;
+                float: none;
+            }
+            .div-abc3
+            {
+                width: 100% !important;
+                float: none;
+            }
+        
+            .div_abc_main
+            {
+                display: grid !important;
+            }
+        
+        
+        }
+        
+        
+        @media screen and (max-width: 768px)
+        {
+            .div-abc
+            {
+                width: 100% !important;
+                float: none;
+                height: auto !important;
+                text-align: left !important;
+                margin-bottom: 10px !important;
+                padding-top: 0px !important;
+            }
+        
+            .div-abc1
+            {
+                width: 100% !important;
+                float: none;
+                margin-bottom: 10px !important;
+            }
+        
+            .div-abc2
+            {
+                width: 100% !important;
+                float: none;
+            }
+        
+            .div-abc3
+            {
+                width: 100% !important;
+                float: none;
+            }
+        
+            .div_abc_main
+            {
+                display: grid !important;
+            }
+        
+            .index_main
+            {
+                margin-top: 195px !important;
+            }
+        
+        }
+        
+        
+        
+        
+        .div_abc_main
+        {
+            display: flex;
+        }
+        .div-abc
+        {
+            width: 10%;
+            float: left;
+            height: auto;
+            padding-top: 30px;
+        }
+        
+        .div-abc1
+        {
+            width: 55%;
+            height: auto;
+            padding-right: 20px;
+        }
+        
+        .div-abc2
+        {
+            width: 18%;
+            height: auto;
+        }
+        
+        .div-abc3
+        {
+            width: 17%;
+            float: right;
+            height: auto;
+            font-weight: bold;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+
+
+        function stickyBar() {
+
+            if ($(window).width() > 755) {
+
+                var chrome = navigator.userAgent.indexOf('Chrome') > -1;
+                var explorer = navigator.userAgent.indexOf('MSIE') > -1;
+                var firefox = navigator.userAgent.indexOf('Firefox') > -1;
+
+                if (firefox == true) {
+                    return false;
+                }
+
+                var ht = $(window).height();
+                var footerinnerht = $('.footer').height();
+
+                var fixSidebar = 100;
+                var contentHeight = $('.astm-tab').innerHeight();
+                // var contentwidth = $('.serch-listing').innerWidth();
+                var sidebarHeight = $('.serch-listing').height();
+                var sidebarBottomPos = contentHeight - sidebarHeight;
+                var trigger = $(window).scrollTop() - fixSidebar;
+                if (contentHeight > sidebarHeight) {
+
+                    if ($(window).scrollTop() >= fixSidebar) {
+
+                        $('.serch-listing').addClass('fixed');
+                        $('.serch-listing').css({ 'height': ht - 80 });
+                        // $('.serch-listing').css({ 'min-width': contentwidth });
+
+
+                    } else {
+                        $('.serch-listing').removeClass('fixed');
+                        $('.serch-listing').css({ 'height': 'auto' });
+                        // $('.serch-listing').css({ 'min-width': 'auto' });
+
+                    }
+
+                    if (trigger >= sidebarBottomPos) {
+                        $('.serch-listing').addClass('bottom');
+
+                        if (chrome == true) {
+                            $('.serch-listing').css({ 'bottom': footerinnerht + 130 });
+                        }
+                        else {
+                            $('.serch-listing').css({ 'bottom': 20 });
+                        }
+
+                    } else {
+
+                        $('.serch-listing').removeClass('bottom');
+                        //                    $('.serch-listing').css({ 'bottom': 'auto' });
+
+                    }
+
+                }
+                else {
+                    $('.serch-listing').removeClass('fixed');
+                    $('.serch-listing').removeClass('bottom');
+
+                }
+            }
+        }
+
+        $(window).scroll(stickyBar);
+
+    </script>
+    
+
+
+        <script type="text/javascript">
+            function BindEvents() {
+                $(document).ready(function () {
+
+                    $(".quickview").fancybox({
+                        'width': '90%',
+                        'height': '90%',
+                        'autoScale': true,
+                        'scrolling': true,
+                        'transitionIn': 'elastic',
+                        'transitionOut': 'elastic',
+                        'type': 'iframe'
+                    });
+
+                 
+                });
+
+            }
+    </script>
+    
+
+   
+
+    <style type="text/css">
+        .fixx
+        {
+            position: fixed !important;
+            top: 290px !important;
+        }
+        .bott
+        {
+            position: fixed !important;
+            top: 20% !important;
+        }
+        .fixed
+        {
+            backface-visibility: hidden;
+            position: fixed;
+            top: 200px;
+            width: inherit;
+            max-width: 354px;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            scrollbar-base-color: #F5F5F5;
+            scrollbar-face-color: #D3D3D3;
+            scrollbar-3dlight-color: #000;
+            scrollbar-highlight-color: #000;
+            scrollbar-track-color: #F5F5F5;
+            scrollbar-arrow-color: gray;
+            scrollbar-shadow-color: inset 0 0 4px rgba(0,0,0,0.2);
+            scrollbar-dark-shadow-color: inset 0 0 4px rgba(0,0,0,.3); /*-ms-overflow-style: -ms-autohiding-scrollbar;*/
+        }
+        .fixed:hover
+        {
+            overflow-y: auto;
+        }
+        .fixed:after
+        {
+            position: fixed;
+        }
+        .bottom
+        {
+            position: absolute;
+            bottom: 20px;
+            top: auto;
+            width: inherit;
+        }
+        
+        #ptag
+        {
+            padding-bottom: 1px;
+            font-size: 16px;
+            color: #9a292a;
+            font-weight: 600;
+        }
+        
+        .mkmage-overlay
+        {
+            display: block;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            background-color: #363636 !important;
+            z-index: 10000;
+            top: 0;
+            left: 0;
+        }
+        
+        
+        
+        #ptag
+        {
+            padding-bottom: 1px;
+            font-size: 16px;
+            color: #9a292a;
+            font-weight: 600;
+        }
+        
+        .mkmage-overlay
+        {
+            display: block;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            background-color: #363636 !important;
+            z-index: 10000;
+            top: 0;
+            left: 0;
+        }
+        
+        .alternate
+        {
+            background-color: #f2f2f2;
+        }
+        
+        
+    </style>
+
+
+    
+    <div style ="margin-top:1px !important;">
+
+     
+
+<div class="index_main">
+    
+    <div class="inner-mid ">
+        <div class="container">
+            <input type="hidden" name="ctl00$ContentPlaceHolder1$T1$antiForgeryToken" id="ctl00_ContentPlaceHolder1_T1_antiForgeryToken" />
+            <div class="astm-international-detail search-page">
+                <div class="search-panel" style="width: 5% !important;">
+                </div>
+                 
+                <div class="astm-tab" style="width: 100%;">
+                    <div class="listing">
+                        <div id="ctl00_ContentPlaceHolder1_T1_UpdatePanel1">
+	
+                                
+                                <div class="row">
+                                    <div class="col-sm-12 sdm-detail" style="width: 103%;">
+                                        <script type="text/javascript">Sys.Application.add_load(BindEvents);</script>
+                                        
+
+                                        
+                                        <div style="margin-bottom: 10px; margin-top: 10px;">
+                                            <span id="ctl00_ContentPlaceHolder1_T1_lbl_you_searched_for" style="font-size: 16px; font-weight: 300;">You Searched for - is 4000</span>
+                                        </div>
+
+                                        <ul>
+                                            
+                                                    <li style="border-bottom: 1px solid gray; margin-bottom: 10px; padding: 10px 0 10px 0;">
+                                                        <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_Panel2">
+		
+
+                                                            <div class="div_abc_main">
+                                                                <div class="div-abc" style="text-align: center; vertical-align: middle;">
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_Label3" class="Label3" style="padding: 5px; border: 1px solid gray; border-radius: 35px; margin-right: 20px;">1</span>
+                                                                    <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_link_preview" title="Standard Prerview" class="quickview" href="BIS_Preview.aspx?id=4000"><img src="images/preview_extra.png" style="height:22px; width:22px;" /></a>
+                                                                      
+
+                                                                </div>
+                                                                <div class="div-abc1">
+                                                                    
+                                                                   <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_lblstdno_rptr" style="font-size:16px;font-weight:bold;color:#005ead;;">IS 4000 : 1992</span>
+
+                                                                    &nbsp; &nbsp;
+
+                                                                <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_lblreaff1">(Reaffirmed Year : </span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_lblreaff">2017</span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_lblreaff2">)</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-size: 15px;">
+                                                                        Code of practice for high strength bolts in steel structures</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-weight: bold;">Technical Committee : </span>
+                                                                    CED 7
+                                                                    
+
+                                                                </div>
+                                                                <div class="div-abc2">
+                                                                    <span><b>Status : </b></span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_lblstatus">Active</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_pnlamds">
+			
+
+                                                                        <span style="font-weight: bold;">No. of Amendments : </span>
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_noanmds" href="BIS_Amendments.aspx?parentid=4000&amp;stdno=IS 4000">1</a>
+                                                                    
+		</div>
+
+
+                                                                </div>
+                                                                <div class="div-abc3">
+                                                                    
+                                                                    
+                                                                    
+
+                                                                    
+
+
+
+                                                                    
+
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl00_pnlLogin">
+			
+                                                                        <a href='BIS_LoginPop.aspx?id=popup' class="quickview">Login to Download</a>
+                                                                    
+		</div>
+
+                                                                    
+                                                                </div>
+                                                            </div>
+
+                                                        
+	</div>
+                                                    </li>
+
+                                                
+                                                    <li style="border-bottom: 1px solid gray; margin-bottom: 10px; padding: 10px 0 10px 0;">
+                                                        <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_Panel2">
+		
+
+                                                            <div class="div_abc_main">
+                                                                <div class="div-abc" style="text-align: center; vertical-align: middle;">
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_Label3" class="Label3" style="padding: 5px; border: 1px solid gray; border-radius: 35px; margin-right: 20px;">2</span>
+                                                                    <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_link_preview" title="Standard Prerview" class="quickview" href="BIS_Preview.aspx?id=iotr44000"><img src="images/preview_extra.png" style="height:22px; width:22px;" /></a>
+                                                                      
+
+                                                                </div>
+                                                                <div class="div-abc1">
+                                                                    
+                                                                   <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_lblstdno_rptr" style="font-size:16px;font-weight:bold;color:#005ead;;">IS/ISO/TR 44000 : 2019 ( ISO/TR 44000:2019)</span>
+
+                                                                    &nbsp; &nbsp;
+
+                                                                
+                                                                    
+                                                                    
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-size: 15px;">
+                                                                        PRINCIPLES FOR SUCCESSFUL COLLABORATIVE BUSINESS RELATIONSHIP MANAGEMENT</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-weight: bold;">Technical Committee : </span>
+                                                                    SSD-I 9
+                                                                    
+
+                                                                </div>
+                                                                <div class="div-abc2">
+                                                                    <span><b>Status : </b></span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_lblstatus">Active</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_pnlamds">
+			
+
+                                                                        <span style="font-weight: bold;">No. of Amendments : </span>
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_noanmds" disabled="disabled">0</a>
+                                                                    
+		</div>
+
+
+                                                                </div>
+                                                                <div class="div-abc3">
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_divabc3">
+			
+                                                                        
+                                                                        <span>Price : </span>
+                                                                        <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_lblINRPrice"> ₹ 1,800.00 ( US$ 21.00)</span>
+                                                                        <input type="hidden" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl01$hdnfldprice" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_hdnfldprice" value="1800" />
+                                                                        <input type="hidden" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl01$hdnfldamd" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_hdnfldamd" value="Y" />
+                                                                        
+                                                                        <br />
+                                                                        <br />
+                                                                    
+		</div>
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_pnlPricedPDF">
+			
+                                                                        <input type="image" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl01$btn_add_cart" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_btn_add_cart" title="Add to Cart" src="images/cart_red.png" src="" border="0" style="height: 25px; width: 25px;" />
+
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl01_addwishlist" title="Add to Wishlist" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$T1$Repeater1$ctl01$addwishlist&#39;,&#39;&#39;)" style="margin-left: 10px;"><i class="fa fa-heart" aria-hidden="true" style="color:#c52327;"></i></a>
+
+                                                                    
+		</div>
+
+                                                                    
+
+
+
+                                                                    
+
+                                                                    
+
+                                                                    
+                                                                </div>
+                                                            </div>
+
+                                                        
+	</div>
+                                                    </li>
+
+                                                
+                                                    <li style="border-bottom: 1px solid gray; margin-bottom: 10px; padding: 10px 0 10px 0;">
+                                                        <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_Panel2" style="color:#c52327;;">
+		
+
+                                                            <div class="div_abc_main">
+                                                                <div class="div-abc" style="text-align: center; vertical-align: middle;">
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_Label3" class="Label3" style="padding: 5px; border: 1px solid gray; border-radius: 35px; margin-right: 20px;">3</span>
+                                                                    <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_link_preview" title="Standard Prerview" class="quickview" href="BIS_Preview.aspx?id=iq400000"><img src="images/preview_extra.png" style="height:22px; width:22px;" /></a>
+                                                                      
+
+                                                                </div>
+                                                                <div class="div-abc1">
+                                                                    
+                                                                   <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_lblstdno_rptr" style="font-size:16px;font-weight:bold;color:#c52327;;">IS/QC 400000 : 1988 ( QC 400000 : 1988)</span>
+
+                                                                    &nbsp; &nbsp;
+
+                                                                <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_lblreaff1">(Reaffirmed Year : </span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_lblreaff">2015</span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_lblreaff2">)</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-size: 15px;">
+                                                                        Fixed Resistors for Use in Electronic Equipment Generic Specification</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-weight: bold;">Technical Committee : </span>
+                                                                    LTD 5
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_pnlsuperseed" style="color: Green !important;">
+			
+                                                                        <br />
+                                                                        <span style="font-weight: bold;">Superseeded by : </span>
+                                                                        
+                                                                    
+		</div>
+
+                                                                </div>
+                                                                <div class="div-abc2">
+                                                                    <span><b>Status : </b></span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_lblstatus">withdrawn</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_pnlamds">
+			
+
+                                                                        <span style="font-weight: bold;">No. of Amendments : </span>
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl02_noanmds" disabled="disabled">0</a>
+                                                                    
+		</div>
+
+
+                                                                </div>
+                                                                <div class="div-abc3">
+                                                                    
+                                                                    
+                                                                    
+
+                                                                    
+
+
+
+                                                                    
+
+                                                                    
+
+                                                                    
+                                                                </div>
+                                                            </div>
+
+                                                        
+	</div>
+                                                    </li>
+
+                                                
+                                                    <li style="border-bottom: 1px solid gray; margin-bottom: 10px; padding: 10px 0 10px 0;">
+                                                        <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_Panel2">
+		
+
+                                                            <div class="div_abc_main">
+                                                                <div class="div-abc" style="text-align: center; vertical-align: middle;">
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_Label3" class="Label3" style="padding: 5px; border: 1px solid gray; border-radius: 35px; margin-right: 20px;">4</span>
+                                                                    <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_link_preview" title="Standard Prerview" class="quickview" href="BIS_Preview.aspx?id=iq440000"><img src="images/preview_extra.png" style="height:22px; width:22px;" /></a>
+                                                                      
+
+                                                                </div>
+                                                                <div class="div-abc1">
+                                                                    
+                                                                   <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_lblstdno_rptr" style="font-size:16px;font-weight:bold;color:#005ead;;">IS/QC 440000 : 1994 ( QC 440000 : 1994)</span>
+
+                                                                    &nbsp; &nbsp;
+
+                                                                <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_lblreaff1">(Reaffirmed Year : </span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_lblreaff">2018</span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_lblreaff2">)</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-size: 15px;">
+                                                                        Directly Heated Positive Step - Function Temperature Coefficient Thermistors - Generic Specification</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-weight: bold;">Technical Committee : </span>
+                                                                    LTD 5
+                                                                    
+
+                                                                </div>
+                                                                <div class="div-abc2">
+                                                                    <span><b>Status : </b></span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_lblstatus">Active</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_pnlamds">
+			
+
+                                                                        <span style="font-weight: bold;">No. of Amendments : </span>
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_noanmds" disabled="disabled">0</a>
+                                                                    
+		</div>
+
+
+                                                                </div>
+                                                                <div class="div-abc3">
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_divabc3">
+			
+                                                                        
+                                                                        <span>Price : </span>
+                                                                        <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_lblINRPrice"> ₹ 5,800.00 ( US$ 65.00)</span>
+                                                                        <input type="hidden" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl03$hdnfldprice" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_hdnfldprice" value="5800" />
+                                                                        <input type="hidden" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl03$hdnfldamd" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_hdnfldamd" value="Y" />
+                                                                        
+                                                                        <br />
+                                                                        <br />
+                                                                    
+		</div>
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_pnlPricedPDF">
+			
+                                                                        <input type="image" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl03$btn_add_cart" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_btn_add_cart" title="Add to Cart" src="images/cart_red.png" src="" border="0" style="height: 25px; width: 25px;" />
+
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl03_addwishlist" title="Add to Wishlist" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$T1$Repeater1$ctl03$addwishlist&#39;,&#39;&#39;)" style="margin-left: 10px;"><i class="fa fa-heart" aria-hidden="true" style="color:#c52327;"></i></a>
+
+                                                                    
+		</div>
+
+                                                                    
+
+
+
+                                                                    
+
+                                                                    
+
+                                                                    
+                                                                </div>
+                                                            </div>
+
+                                                        
+	</div>
+                                                    </li>
+
+                                                
+                                                    <li style="border-bottom: 1px solid gray; margin-bottom: 10px; padding: 10px 0 10px 0;">
+                                                        <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_Panel2">
+		
+
+                                                            <div class="div_abc_main">
+                                                                <div class="div-abc" style="text-align: center; vertical-align: middle;">
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_Label3" class="Label3" style="padding: 5px; border: 1px solid gray; border-radius: 35px; margin-right: 20px;">5</span>
+                                                                    <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_link_preview" title="Standard Prerview" class="quickview" href="BIS_Preview.aspx?id=iq440001_1993_reaff2021"><img src="images/preview_extra.png" style="height:22px; width:22px;" /></a>
+                                                                      
+
+                                                                </div>
+                                                                <div class="div-abc1">
+                                                                    
+                                                                   <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_lblstdno_rptr" style="font-size:16px;font-weight:bold;color:#005ead;;">IS/QC 440001 : 1993 ( QC 440001 : 1993)</span>
+
+                                                                    &nbsp; &nbsp;
+
+                                                                <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_lblreaff1">(Reaffirmed Year : </span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_lblreaff">2021</span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_lblreaff2">)</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-size: 15px;">
+                                                                        Directly Heated Positive Step Function Temperature Coefficient Thermistors - Blank Detail Specification - Assessment Level E</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    <span style="font-weight: bold;">Technical Committee : </span>
+                                                                    LTD 5
+                                                                    
+
+                                                                </div>
+                                                                <div class="div-abc2">
+                                                                    <span><b>Status : </b></span>
+                                                                    <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_lblstatus">Active</span>
+                                                                    <br />
+                                                                    <br />
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_pnlamds">
+			
+
+                                                                        <span style="font-weight: bold;">No. of Amendments : </span>
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_noanmds" disabled="disabled">0</a>
+                                                                    
+		</div>
+
+
+                                                                </div>
+                                                                <div class="div-abc3">
+                                                                    
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_divabc3">
+			
+                                                                        
+                                                                        <span>Price : </span>
+                                                                        <span id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_lblINRPrice"> ₹ 2,500.00 ( US$ 29.00)</span>
+                                                                        <input type="hidden" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl04$hdnfldprice" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_hdnfldprice" value="2500" />
+                                                                        <input type="hidden" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl04$hdnfldamd" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_hdnfldamd" value="Y" />
+                                                                        
+                                                                        <br />
+                                                                        <br />
+                                                                    
+		</div>
+                                                                    <div id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_pnlPricedPDF">
+			
+                                                                        <input type="image" name="ctl00$ContentPlaceHolder1$T1$Repeater1$ctl04$btn_add_cart" id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_btn_add_cart" title="Add to Cart" src="images/cart_red.png" src="" border="0" style="height: 25px; width: 25px;" />
+
+                                                                        <a id="ctl00_ContentPlaceHolder1_T1_Repeater1_ctl04_addwishlist" title="Add to Wishlist" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$T1$Repeater1$ctl04$addwishlist&#39;,&#39;&#39;)" style="margin-left: 10px;"><i class="fa fa-heart" aria-hidden="true" style="color:#c52327;"></i></a>
+
+                                                                    
+		</div>
+
+                                                                    
+
+
+
+                                                                    
+
+                                                                    
+
+                                                                    
+                                                                </div>
+                                                            </div>
+
+                                                        
+	</div>
+                                                    </li>
+
+                                                
+
+                                        </ul>
+
+
+                                        <a id="ctl00_ContentPlaceHolder1_T1_hyperlink_login_popup1" title="Login" style="visibility: hidden;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$T1$hyperlink_login_popup1&#39;,&#39;&#39;)">Custcode</a>
+                                        <input type="submit" name="ctl00$ContentPlaceHolder1$T1$btn_refresh_wish" value="Button" id="ctl00_ContentPlaceHolder1_T1_btn_refresh_wish" style="visibility: hidden;" />
+
+
+
+                                        <div class="page-link-bottom">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            
+</div>
+
+                        <div id="ctl00_ContentPlaceHolder1_T1_UpdatePanel3">
+	
+                                <div id="ctl00_ContentPlaceHolder1_T1_Panel1">
+		
+                                    <div id="ctl00_ContentPlaceHolder1_T1_divdownloads" class="down-load">
+                                        <a id="ctl00_ContentPlaceHolder1_T1_lnkbtnDownloadPdf" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$T1$lnkbtnDownloadPdf&#39;,&#39;&#39;)"><img src="/images/pdf-icon.png" />
+                                                    Download Search Result in Pdf</a>
+                                        <a id="ctl00_ContentPlaceHolder1_T1_lnkbtnDownload" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$T1$lnkbtnDownload&#39;,&#39;&#39;)"><img src="/images/excel.png" />
+                                                        Download Search Result in Excel</a>
+                                    </div>
+                                
+	</div>
+                            
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    function login_popup12() {
+        //            var alink = document.getElementById("ctl00_ContentPlaceHolder1_hyperlink_login_popup1");
+        var alink = document.getElementById('ctl00_ContentPlaceHolder1_T1_hyperlink_login_popup1');
+        $(alink).fancybox({
+            'width': '90%',
+            'height': '80%',
+            'autoScale': true,
+            'scrolling': true,
+            'transitionIn': 'elastic',
+            'transitionOut': 'elastic',
+            'type': 'iframe',
+            afterClose: function () { parent.location.reload(true); },
+            'title': '',
+            'href': 'BIS_LoginPop.aspx?id=popup'
+
+        }).trigger('click');
+    }
+
+
+</script>
+
+     </div>
+    
+
+
+
+
+            </div>
+        
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" style="width: 100% !important;">
+                        <ul>
+                            <li><a href="https://bis.gov.in/" target="_blank">BIS Home</a> <a href="../BIS_FAQ.aspx?id=sitemap"
+                                class="bis_sitemap">Sitemap</a> <a href="../BIS_FAQ.aspx?id=feedback" class="bis_customer_feedback">
+                                    Customer Feedback</a> </li>
+                            <li><a href="../BIS_FAQ.aspx?id=faq" class="bis_faq">Frequently Asked Questions (FAQ)</a>
+                                <a href="../BIS_FAQ.aspx?id=credit1" class="bis_credit1">Guidelines for using Credit
+                                    Cards</a> <a href="../BIS_FAQ.aspx?id=credit2" class="bis_credit2">Debit/International
+                                        Credit Cards</a> </li>
+                            
+                            <li><a href="../fop_guide.pdf" target="_blank">Guidelines for Viewing Downloaded Standards.</a>
+                            </li>
+                            <li><a href="../BIS_FreeAmendments.aspx?id=0">Search For Free Amendments</a> <a href="../BIS_Withdrawn.aspx">
+                                Withdrawn/Archive Standards</a> </li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div style="border: 0.5px solid white; height: 0.3px; margin: 10px 0 10px 0;">
+            </div>
+            <div style="padding: 10px; text-align: center; top: 50%;">
+                <span id="ctl00_Label9" style="font-size: 17px; font-weight: 300; color: White;">BSB Edge is Official Distributers of various international standards.<br /> We represent <span style='font-style:italic;'>ASME, AFNOR, API, ASNT, ASTM, BIS, ACI, BSI, CSA, DIN, HI, ISO, AWWA, IEC, IEEE, JSA, NBBI, SAE, UL, NACE, HSB, AIAG</span>.<br /> You can download international standards from our website : <span><a style='color:white;' href='https://www.bsbedge.com'>www.bsbedge.com</a></span></span>
+            </div>
+            <div>
+                <div class="social-media" style="width: 100%; text-align: center !important;">
+                    <a href="https://www.facebook.com/BSBEdgeIN/" target="_blank"><i class="fa fa-facebook">
+                    </i></a>&nbsp; <a href="https://twitter.com/BSB_Edge" target="_blank"><i class="fa fa-twitter">
+                    </i></a>&nbsp; <a href="https://www.linkedin.com/company/11129745/" target="_blank">
+                        <i class="fa fa-linkedin"></i></a>&nbsp; <a href="https://www.youtube.com/channel/UCGVSgR_peX8smvwzJZ3xMlA"
+                            target="_blank"><i class="fa fa-youtube-play"></i></a>
+                </div>
+            </div>
+            <br />
+            <div style="color: White; font-size: 13px; text-align: center; width: 100%;">
+                <p style="text-align: center !important;">
+                    ** This site best viewed in Google Chrome.</p>
+            </div>
+        </div>
+    </div>
+	<script src="../js/tether.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/owl.carousel.js"></script>
+    <script src="../js/easy-responsive-tabs.js"></script>
+    <script src="../js/jquery.colorbox.js"></script>
+    <script src="../js/main.js"></script>
+    <link href="../css/jquery.mobile-menu.css" rel="stylesheet" type="text/css" />
+    <link href="../css/site-icons.css" rel="stylesheet" type="text/css" />
+    <script src="../js/jquery.mobile-menu.min.js" type="text/javascript"></script>
+    <script>
+        jQuery(document).ready(function ($) {
+            $("#mobile-menu").mobileMenu({
+                MenuWidth: 250,
+                SlideSpeed: 250,
+                WindowsMaxWidth: 767,
+                PagePush: true,
+                FromLeft: false,
+                Overlay: true,
+                CollapseMenu: true,
+                ClassName: "mobile-menu"
+            });
+        });        
+    </script>
+    <script>
+        $(".toggle-link").click(function (event) {
+            event.preventDefault();
+            $('.slide-content-top').slideToggle('slow');
+            $(this).toggleClass("close");
+        });
+    </script>
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            // for (i = 0; i < tabcontent.length; i++) {
+            //     tabcontent[i].style.display = "none";
+            // }
+            if (!tabcontent || tabcontent.length === 0) return;
+
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tabClose");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            // document.getElementById(cityName).style.display = "block";
+            var el = document.getElementById(cityName);
+            if (el) {
+                el.style.display = "block";
+            }
+            evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        // document.getElementById("defaultOpen").click();
+
+        document.getElementById("defaultOpen")?.click();
+    </script>
+	
+   
+<link rel="stylesheet" href="../css/jquery.fancybox.min.css" />
+        <script src="../js/jquery.fancybox.min.js"></script>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+Sys.Application.add_init(function() {
+    $create(Sys.Extended.UI.AutoCompleteBehavior, {"completionListCssClass":"AutoExtender","completionListItemCssClass":"AutoExtenderList","completionSetCount":1,"delimiterCharacters":"","firstRowSelected":true,"highlightedItemCssClass":"AutoExtenderHighlight","id":"ctl00_AutoCompleteExtender1","minimumPrefixLength":1,"serviceMethod":"GetStdNo_Bis","servicePath":"popupextender.aspx","useContextKey":true}, {"itemSelected":GetID}, null, $get("ctl00_txt_standardnumber"));
+});
+//]]>
+</script>
+</form>
+</body>
+</html>

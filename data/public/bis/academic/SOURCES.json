@@ -1,0 +1,170 @@
+[
+  {
+    "family_id": "is-800",
+    "query": "IS 800",
+    "designation_regex": "^IS 800\\s*:",
+    "pilot_module": "structural_steel_design"
+  },
+  {
+    "family_id": "is-2062",
+    "query": "IS 2062",
+    "designation_regex": "^IS 2062\\s*:",
+    "pilot_module": "structural_steel_materials"
+  },
+  {
+    "family_id": "is-808",
+    "query": "IS 808",
+    "designation_regex": "^IS 808\\s*:",
+    "pilot_module": "structural_steel_sections"
+  },
+  {
+    "family_id": "is-816",
+    "query": "IS 816",
+    "designation_regex": "^IS 816\\s*:",
+    "pilot_module": "welding_fabrication_erection"
+  },
+  {
+    "family_id": "is-9595",
+    "query": "IS 9595",
+    "designation_regex": "^IS 9595\\s*:",
+    "pilot_module": "welding_fabrication_erection"
+  },
+  {
+    "family_id": "is-7205",
+    "query": "IS 7205",
+    "designation_regex": "^IS 7205\\s*:",
+    "pilot_module": "steel_erection_safety"
+  },
+  {
+    "family_id": "is-7215",
+    "query": "IS 7215",
+    "designation_regex": "^IS 7215\\s*:",
+    "pilot_module": "steel_fabrication_tolerances"
+  },
+  {
+    "family_id": "is-12843",
+    "query": "IS 12843",
+    "designation_regex": "^IS 12843\\s*:",
+    "pilot_module": "steel_erection_tolerances"
+  },
+  {
+    "family_id": "is-4000",
+    "query": "IS 4000",
+    "designation_regex": "^IS 4000\\s*:",
+    "pilot_module": "structural_steel_bolting"
+  },
+  {
+    "family_id": "is-9172",
+    "query": "IS 9172",
+    "designation_regex": "^IS 9172\\s*:",
+    "pilot_module": "structural_steel_corrosion"
+  },
+  {
+    "family_id": "is-875",
+    "query": "IS 875",
+    "designation_regex": "^IS 875\\s*:",
+    "pilot_module": "building_loads"
+  },
+  {
+    "family_id": "is-1893",
+    "query": "IS 1893",
+    "designation_regex": "^IS 1893\\s*:",
+    "pilot_module": "earthquake_resistance"
+  },
+  {
+    "family_id": "is-13920",
+    "query": "IS 13920",
+    "designation_regex": "^IS 13920\\s*:",
+    "pilot_module": "earthquake_detailing"
+  },
+  {
+    "family_id": "is-456",
+    "query": "IS 456",
+    "designation_regex": "^IS 456\\s*:",
+    "pilot_module": "concrete_and_reinforcement"
+  },
+  {
+    "family_id": "is-1343",
+    "query": "IS 1343",
+    "designation_regex": "^IS 1343\\s*:",
+    "pilot_module": "prestressed_concrete"
+  },
+  {
+    "family_id": "is-10262",
+    "query": "IS 10262",
+    "designation_regex": "^IS 10262\\s*:",
+    "pilot_module": "concrete_mix_design"
+  },
+  {
+    "family_id": "is-383",
+    "query": "IS 383",
+    "designation_regex": "^IS 383\\s*:",
+    "pilot_module": "concrete_aggregates"
+  },
+  {
+    "family_id": "is-1786",
+    "query": "IS 1786",
+    "designation_regex": "^IS 1786\\s*:",
+    "pilot_module": "reinforcement_steel"
+  },
+  {
+    "family_id": "is-4926",
+    "query": "IS 4926",
+    "designation_regex": "^IS 4926\\s*:",
+    "pilot_module": "ready_mixed_concrete"
+  },
+  {
+    "family_id": "is-516",
+    "query": "IS 516",
+    "designation_regex": "^IS 516\\s*:",
+    "pilot_module": "concrete_testing"
+  },
+  {
+    "family_id": "is-1904",
+    "query": "IS 1904",
+    "designation_regex": "^IS 1904\\s*:",
+    "pilot_module": "foundations"
+  },
+  {
+    "family_id": "is-6403",
+    "query": "IS 6403",
+    "designation_regex": "^IS 6403\\s*:",
+    "pilot_module": "foundation_bearing_capacity"
+  },
+  {
+    "family_id": "is-2911",
+    "query": "IS 2911",
+    "designation_regex": "^IS 2911\\s*:",
+    "pilot_module": "pile_foundations"
+  },
+  {
+    "family_id": "is-2720",
+    "query": "IS 2720",
+    "designation_regex": "^IS 2720\\s*:",
+    "pilot_module": "soil_testing"
+  },
+  {
+    "family_id": "is-2131",
+    "query": "IS 2131",
+    "designation_regex": "^IS 2131\\s*:",
+    "pilot_module": "soil_investigation"
+  },
+  {
+    "family_id": "is-8009",
+    "query": "IS 8009",
+    "designation_regex": "^IS 8009\\s*:",
+    "pilot_module": "foundation_settlement"
+  },
+  {
+    "family_id": "is-3764",
+    "query": "IS 3764",
+    "designation_regex": "^IS 3764\\s*:",
+    "pilot_module": "excavation_safety"
+  },
+  {
+    "family_id": "sp-7-nbc",
+    "query": "SP 7",
+    "designation_regex": "^SP 7\\s*:",
+    "pilot_module": "national_building_code"
+  }
+]
