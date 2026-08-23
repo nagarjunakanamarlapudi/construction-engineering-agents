@@ -44,6 +44,16 @@ def test_tools_validate_inputs_enforce_access_and_return_citable_observations():
     )
     assert "status open" in quality.evidence[0].chunk.text.lower()
 
+    all_quality = tools.call(
+        ToolRequest(
+            tool_name="query_quality_records",
+            arguments={},
+            project_id="BLR-STEEL-DEMO",
+            access_scopes=["project:blr-steel-demo"],
+        )
+    )
+    assert all_quality.evidence_ids[:2] == ["NCR-005", "NCR-006"]
+
     with pytest.raises(PermissionError):
         tools.call(
             ToolRequest(

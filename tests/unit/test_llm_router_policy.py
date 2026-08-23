@@ -157,9 +157,7 @@ def test_quality_investigation_uses_only_quality_graph_and_record_tools():
         }
     )
 
-    plan = router.route(
-        ChatRequest(question="Which NCRs remain open pending reinspection?")
-    )
+    plan = router.route(ChatRequest(question="Which NCRs remain open pending reinspection?"))
 
     assert plan.tool_names == [
         "query_quality_records",

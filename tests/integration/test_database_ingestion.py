@@ -36,7 +36,7 @@ def test_all_three_stores_ingest_the_same_corpus_twice_without_duplicates():
 
         assert first.records.total == len(corpus.records)
         assert second.records.total == len(corpus.records)
-        assert records.count() == len(corpus.records)
+        assert len(records.list(project_id=corpus.records[0].project_id)) == len(corpus.records)
         assert search.count() == len(corpus.chunks)
         assert graph.count_nodes(PROJECT_ID := corpus.records[0].project_id) == len(corpus.records)
         assert graph.count_relationships(PROJECT_ID) == len(corpus.relationships)

@@ -41,7 +41,7 @@ def check_services(settings: Settings) -> dict[str, dict[str, Any]]:
         results["neo4j"] = {"healthy": False, "error": type(error).__name__, "port": 7687}
 
     try:
-        response = httpx.get("http://localhost:3000/api/public/health", timeout=3)
+        response = httpx.get("http://127.0.0.1:3000/api/public/health", timeout=3)
         results["langfuse"] = {
             "healthy": response.is_success,
             "port": 3000,

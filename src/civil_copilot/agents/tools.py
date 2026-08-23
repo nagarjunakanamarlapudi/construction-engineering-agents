@@ -179,8 +179,20 @@ class ProjectTools:
                 and (not requested_status or record.status == requested_status)
                 and self._permitted(record, request)
             ]
+
+            def quality_priority(record: ProjectRecord) -> tuple[int, str]:
+                if record.record_type == "ncr" and record.status == "open":
+                    return (0, record.record_id)
+                if record.record_type == "inspection" and record.status == "rejected":
+                    return (1, record.record_id)
+                if record.status in {"open", "repair_required", "pending"}:
+                    return (2, record.record_id)
+                if record.record_type == "ncr":
+                    return (3, record.record_id)
+                return (4, record.record_id)
+
             return self._records_observation(
-                request.tool_name, sorted(records, key=lambda item: item.record_id)
+                request.tool_name, sorted(records, key=quality_priority)
             )
 
         if request.tool_name == "compare_revisions":

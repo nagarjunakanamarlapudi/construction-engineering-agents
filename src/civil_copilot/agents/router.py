@@ -161,9 +161,7 @@ class LLMQuestionRouter:
         else:
             question = request.question.lower()
             has_activity = bool(re.search(r"\bact-[a-z0-9-]+\b", question))
-            has_quality = any(
-                term in question for term in ("ncr", "inspection", "weld", "quality")
-            )
+            has_quality = any(term in question for term in ("ncr", "inspection", "weld", "quality"))
             has_revision = bool(re.search(r"\bs-\d+\b", question)) or any(
                 term in question for term in ("drawing", "revision", "what changed")
             )

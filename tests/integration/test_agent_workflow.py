@@ -135,3 +135,21 @@ def test_quality_answer_leads_with_the_open_ncr_records_that_name_failed_inspect
         "NCR-005",
         "NCR-006",
     ]
+
+
+def test_forced_agentic_quality_demo_does_not_lead_with_accepted_welds():
+    response = _workflow().invoke(
+        ChatRequest(
+            question=(
+                "Which welds remain blocked by quality problems, and what must happen "
+                "before they can be accepted?"
+            ),
+            route_override="agentic_rag",
+        )
+    )
+
+    assert response.route == "agentic_rag"
+    assert [citation.record_id for citation in response.citations[:2]] == [
+        "NCR-005",
+        "NCR-006",
+    ]

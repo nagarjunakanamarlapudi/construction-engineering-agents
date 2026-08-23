@@ -29,7 +29,7 @@ class Settings(BaseSettings):
 
     langfuse_public_key: SecretStr | None = None
     langfuse_secret_key: SecretStr | None = None
-    langfuse_base_url: AnyHttpUrl = "https://us.cloud.langfuse.com"
+    langfuse_base_url: AnyHttpUrl = "http://localhost:3000"
     langfuse_debug: bool = False
 
     database_url: PostgresDsn = "postgresql://civil_copilot:change-me@localhost:55432/civil_copilot"

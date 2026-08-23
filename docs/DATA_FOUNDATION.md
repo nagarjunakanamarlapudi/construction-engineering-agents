@@ -2,11 +2,11 @@
 
 ## 1. Purpose
 
-The first implementation is a **correlated academic data foundation**. It combines the public material already collected with one clearly labelled synthetic project, normalizes identifiers, and proves that related records can be connected with defensible provenance. It is designed to support direct RAG first and a bounded agentic demonstration afterward.
+The implemented **correlated academic data foundation** combines the public material already collected with one clearly labelled synthetic project, normalizes identifiers, and proves that related records can be connected with defensible provenance. It now supports Direct RAG, Graph RAG, and bounded Agentic RAG through the shared production modules.
 
 The initial vertical slice is one **synthetic India-based steel-framed building project or structural-steel work package**. This makes IS 800 highly relevant while still exercising concrete/foundations, loads, seismic, fire, project controls, procurement, field execution, quality, and local approval information where applicable. Every synthetic record remains visibly marked as academic demonstration data.
 
-Direct RAG follows the data-readiness gates in this document. One read-only agentic investigation follows the direct-RAG baseline so the course submission can compare the two. Authorized project data remains a later real-world validation step.
+Direct RAG follows the data-readiness gates in this document. The completed pilot also includes several read-only agentic investigations so the course submission can compare routes and tools. Authorized project data remains a later real-world validation step.
 
 The operating documents are:
 
@@ -142,7 +142,7 @@ No agent is required for these steps. OCR, parsers, deterministic matching, and 
 
 ## 9. Data-readiness gates before agents
 
-Targets should be calibrated after profiling, but the pilot should not move to agent implementation until:
+These gates governed the synthetic pilot and must be recalibrated for future authorized data:
 
 - authoritative-source rules exist for every in-scope record type;
 - 100% of published records retain source ID, source system, checksum/version, timestamps, and ACL scope;
@@ -155,7 +155,7 @@ Targets should be calibrated after profiling, but the pilot should not move to a
 - cross-project and unauthorized-record leakage is zero in the test dataset; and
 - licensed standards and restricted records remain access-controlled and auditable.
 
-After these gates, the next step is deterministic retrieval and evidence inspection. Agentic planning comes later and must demonstrate measurable improvement over that baseline.
+The synthetic corpus passes the applicable provenance, relationship, and access tests, so deterministic retrieval, graph traversal, and bounded agentic planning are now implemented. A future real-project pilot must pass the same gates before its records enter agentic investigations.
 
 ## 10. Pilot collection package
 

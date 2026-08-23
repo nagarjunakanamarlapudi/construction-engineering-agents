@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help setup services-up services-down observability-up observability-down up down health test lint format security \
+.PHONY: help setup services-up services-down observability-up observability-down up down health credentials test lint format security \
 	data-download data-generate data-validate data-status ingest reindex reindex-docs \
 	reindex-graph reset-indexes eval eval-live notebooks api ui
 
@@ -29,6 +29,9 @@ down: services-down ## Stop the local stack without deleting data
 
 health: ## Verify databases and application dependencies
 	uv run python scripts/check_services.py
+
+credentials: ## Validate OpenAI and Mem0 keys without printing account data
+	uv run python scripts/check_credentials.py
 
 test: ## Run the test suite
 	uv run pytest -q

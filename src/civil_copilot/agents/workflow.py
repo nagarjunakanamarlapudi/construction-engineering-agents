@@ -242,7 +242,10 @@ class CopilotWorkflow:
             exact_evidence = [item for item in evidence if item.exact_id_match]
             if exact_evidence:
                 answer_evidence = exact_evidence
-        elif "remain open" in request.question.lower() or "open ncr" in request.question.lower():
+        elif any(
+            term in request.question.lower()
+            for term in ("remain open", "open ncr", "quality", "blocked", "inspection")
+        ):
             open_ncrs = sorted(
                 (
                     item
@@ -268,11 +271,7 @@ class CopilotWorkflow:
                         if node.record_type == "schedule_activity"
                     ]
                     promoted_activity = next(
-                        (
-                            item
-                            for item in evidence
-                            if item.chunk.record_id in activity_ids
-                        ),
+                        (item for item in evidence if item.chunk.record_id in activity_ids),
                         None,
                     )
                     if promoted_activity:
@@ -382,9 +381,7 @@ class CopilotWorkflow:
                             "route": response.route,
                             "grounded": response.grounded,
                             "abstained": response.abstained,
-                            "citation_ids": [
-                                citation.record_id for citation in response.citations
-                            ],
+                            "citation_ids": [citation.record_id for citation in response.citations],
                         }
                     )
                 )

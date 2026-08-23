@@ -9,7 +9,7 @@ This catalogue identifies actual data that can support the project before a priv
 - **Link-only reference data:** publicly accessible, but copyright, project-purpose, or redistribution limits mean the repository stores only metadata and URLs.
 - **Pilot-required data:** no sufficiently complete public source was found; an authorized project extract is necessary.
 
-Public data is useful for developing parsers, metadata conventions, document-aware chunking, model identity, and cross-reference tests. It cannot prove the complete design-to-handover correlation chain.
+Public data is useful for developing parsers, metadata conventions, document-aware chunking, model identity, and cross-reference tests. Public data by itself cannot prove the complete design-to-handover correlation chain; the clearly labelled synthetic project supplies that connected demonstration layer.
 
 ## 2. Recommended public reference project
 
@@ -74,7 +74,7 @@ Checksums, source URLs and licences are recorded in [the public-data manifest](.
 | Preserved sources | 28 catalogue-search pages and 88 public preview pages |
 | Labels | `public_official`, `academic_noncommercial`, `official_public_preview` |
 | Content boundary | Each record says `public_preview_or_metadata_not_full_standard`; no preview is silently represented as a complete standard |
-| Correlation value | Standard family, designation, status, source URL and public preview text can be connected to the future synthetic project's adopted-code register and requirements |
+| Correlation value | Standard family, designation, status, source URL and public preview text connect to the synthetic project's adopted-code register and requirements |
 
 The complete source list, regeneration command, and query example are in the [BIS dataset README](../data/public/bis/academic/README.md). Publication status is retained exactly as returned by BIS; catalogue presence does not establish project applicability.
 

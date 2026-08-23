@@ -20,6 +20,7 @@ def test_settings_use_safe_local_defaults(monkeypatch):
     assert database_host["port"] == 55432
     assert str(settings.qdrant_url) == "http://localhost:6333/"
     assert settings.neo4j_uri == "bolt://localhost:7687"
+    assert str(settings.langfuse_base_url) == "http://localhost:3000/"
 
 
 def test_settings_read_secrets_from_environment(monkeypatch):

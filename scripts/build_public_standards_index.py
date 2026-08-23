@@ -133,7 +133,8 @@ def fetch_bytes(url: str) -> bytes:
     if parsed.scheme != "https" or parsed.hostname != "standardsbis.bsbedge.com":
         raise ValueError(f"Refusing non-BIS or non-HTTPS URL: {url}")
     request = Request(url, headers={"User-Agent": USER_AGENT})  # noqa: S310
-    with urlopen(request, timeout=45) as response:  # noqa: S310
+    # The parsed scheme and exact BIS host are allowlisted immediately above.
+    with urlopen(request, timeout=45) as response:  # noqa: S310  # nosec B310
         return response.read()
 
 
