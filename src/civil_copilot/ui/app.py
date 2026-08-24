@@ -9,6 +9,7 @@ from uuid import uuid4
 import httpx
 import streamlit as st
 
+from civil_copilot.api.principal import DEFAULT_DEMO_USER_ID
 from civil_copilot.config import Settings
 from civil_copilot.ui.presenters import (
     build_answer_presentation,
@@ -23,7 +24,7 @@ from civil_copilot.ui.theme import APP_CSS, ROUTE_LABELS
 
 API_BASE = Settings().api_base_url
 PUBLIC_API_BASE = Settings().public_api_base_url
-DEMO_USER_ID = "demo-presenter"
+DEMO_USER_ID = DEFAULT_DEMO_USER_ID
 
 st.set_page_config(
     page_title="Civil Engineering Project Copilot",

@@ -56,6 +56,14 @@ def test_streamlit_ui_uses_public_api_base_for_browser_citation_links():
     assert "PUBLIC_API_BASE}/api/records/" in source
 
 
+def test_streamlit_memory_uses_the_server_owned_default_demo_identity():
+    source = (ROOT / "src" / "civil_copilot" / "ui" / "app.py").read_text(encoding="utf-8")
+
+    assert "from civil_copilot.api.principal import DEFAULT_DEMO_USER_ID" in source
+    assert "DEMO_USER_ID = DEFAULT_DEMO_USER_ID" in source
+    assert 'DEMO_USER_ID = "demo-presenter"' not in source
+
+
 def test_standards_matrix_uses_wrapping_reader_cards_instead_of_a_wide_table():
     app_source = (ROOT / "src" / "civil_copilot" / "ui" / "app.py").read_text(encoding="utf-8")
     theme_source = (ROOT / "src" / "civil_copilot" / "ui" / "theme.py").read_text(encoding="utf-8")

@@ -10,7 +10,7 @@ This file records what was actually executed for the current repository state. I
 
 | Area | Command / check | Result |
 |---|---|---|
-| Unit/integration/UI/operations contracts | `uv run pytest -q` | 249 passed, 7 live-service tests intentionally skipped in the default run |
+| Unit/integration/UI/operations contracts | `uv run pytest -q` | 250 passed, 7 live-service tests intentionally skipped in the default run |
 | Focused live database integration | `RUN_DATABASE_INTEGRATION=1 uv run pytest tests/integration/test_database_ingestion.py -q` | 1 passed against PostgreSQL, Qdrant, and Neo4j |
 | Formatting and lint | `make lint` | Ruff formatting and lint passed |
 | Code security | `make security` | Bandit: no issues; pip-audit: no known dependency vulnerabilities |

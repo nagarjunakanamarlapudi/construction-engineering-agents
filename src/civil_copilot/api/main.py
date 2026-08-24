@@ -13,7 +13,11 @@ from pydantic import BaseModel, Field
 from civil_copilot.agents.state import ChatRequest, ChatResponse
 from civil_copilot.agents.tools import ToolRequest
 from civil_copilot.agents.workflow import CopilotWorkflow
-from civil_copilot.api.principal import DEMO_PRINCIPALS, DemoPrincipal
+from civil_copilot.api.principal import (
+    DEFAULT_DEMO_PRINCIPAL_ID,
+    DEMO_PRINCIPALS,
+    DemoPrincipal,
+)
 from civil_copilot.config import Settings
 from civil_copilot.data.models import GoldScenario
 from civil_copilot.graph.service import GraphPath
@@ -67,7 +71,7 @@ def build_workflow() -> CopilotWorkflow:
 def create_app(
     workflow: CopilotWorkflow | None = None,
     application_runtime: ApplicationRuntime | None = None,
-    demo_principal_id: str = "reviewer",
+    demo_principal_id: str = DEFAULT_DEMO_PRINCIPAL_ID,
 ) -> FastAPI:
     owns_runtime = workflow is None and application_runtime is None
 

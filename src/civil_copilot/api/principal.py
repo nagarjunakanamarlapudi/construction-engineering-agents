@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict
 
+DEFAULT_DEMO_PRINCIPAL_ID = "reviewer"
+
 
 class DemoPrincipal(BaseModel):
     model_config = ConfigDict(frozen=True)
@@ -32,3 +34,5 @@ DEMO_PRINCIPALS: dict[str, DemoPrincipal] = {
         access_scopes=("project:blr-steel-demo", "public", "role:commercial"),
     ),
 }
+
+DEFAULT_DEMO_USER_ID = DEMO_PRINCIPALS[DEFAULT_DEMO_PRINCIPAL_ID].user_id
