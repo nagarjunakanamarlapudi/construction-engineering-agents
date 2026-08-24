@@ -15,23 +15,23 @@ Use the same color meaning in every image:
 
 Avoid small paragraphs, unexplained abbreviations, product logos, photorealism, three-dimensional effects, and dark backgrounds. Spell every label exactly as supplied. Keep all important text safely inside the image margins.
 
-## 1. Capability roadmap
+## 1. Capability overview
 
-Target file: `submission-capability-roadmap.png`
+Target file: `submission-capability-overview.png`
 
 Prompt:
 
-> Create a landscape 16:9 hand-drawn whiteboard infographic titled “What the Civil Engineering Project Copilot Can Answer”. Show a clear left-to-right road with four large numbered stages.
+> Create a landscape 16:9 hand-drawn whiteboard infographic titled “What the Civil Engineering Project Copilot Can Answer”. Show four large numbered capabilities without implementation-status badges.
 >
-> Stage 1, blue-gray, status label “AVAILABLE NOW”, heading “Information collected today”. Add two short question cards: “What sample building models are available?” and “Which Indian code sources are catalogued?” Add a small note: “Public samples and reference links—not a live project.”
+> Capability 1, blue, heading “Direct evidence search”. Question cards: “What is the latest RFI-087 response?” and “Which drawing revision is current?” Explain that RAG retrieves project records and cites the evidence.
 >
-> Stage 2, green, status label “REQUIRES AUTHORIZED PROJECT DATA”, heading “Project search with evidence”. Question cards: “What is the latest approved drawing?” and “What answer was approved for a design question?”
+> Capability 2, green, heading “Connected project records”. Question cards: “What changed from S-204 Rev 3 to Rev 5?” and “Which issue affects ACT-STEEL-009?” Explain that Graph RAG follows verified links between records.
 >
-> Stage 3, green-orange, status label “REQUIRES AUTHORIZED PROJECT DATA”, heading “Connected records and calculations”. Question cards: “Which issue affects this work activity?” and “What changed between two drawing versions?”
+> Capability 3, purple-orange, heading “Assisted investigation with ReAct”. Question cards: “Why is this work delayed?” and “What downstream work may be affected?” Explain that Document, Schedule, and Risk specialists choose approved tools, inspect returned observations, and stop within limits.
 >
-> Stage 4, purple, status label “FUTURE ASSISTED INVESTIGATION”, heading “Several steps for one question”. Question cards: “Why is this work delayed?” and “What downstream work may be affected?”
+> Capability 4, teal-green, heading “Standards evidence review”. Question card: “Which IS 800 preview-supported practices have project evidence?” Explain that project records are compared only with topics visible in the official BIS public preview and that this cannot prove full compliance.
 >
-> Add a prominent bottom note in a gray rounded banner: “Current repository status: data collection and design only. No agent has been built.” Use friendly icons: folders/models, magnifying glass with cited page, linked records with calculator, and a careful assistant checking several evidence cards. Make progression and status differences obvious at a glance. Do not add any other text.
+> Add this bottom note: “Every answer uses permitted evidence and citations. Synthetic project data and official public previews are clearly labelled.” Use friendly icons and make the four capabilities obvious at a glance.
 
 ## 2. Complete system architecture
 
@@ -63,25 +63,25 @@ Prompt:
 
 ## 4. Responsibility map
 
-Target file: `submission-responsibility-map.png`
+Target file: `component-responsibility-map.png`
 
 Prompt:
 
-> Create a landscape 16:9 hand-drawn whiteboard infographic titled “Each Part Has One Clear Job”. Use six large rounded cards arranged in two rows, with simple icons and clear arrows where necessary.
+> Create a landscape 16:9 hand-drawn whiteboard infographic titled “Each Part Has One Clear Job”. Use seven large rounded cards with simple icons and clear arrows.
 >
-> Blue card “DATA COLLECTION”: “Brings records in, keeps originals, and checks versions and access.”
+> Blue card “Data preparation”: “Collects, labels, versions, and links project and public-reference records.”
 >
-> Green card “PROJECT SEARCH — RAG”: “Finds relevant current records and returns supporting evidence.”
+> Green card “Project search — RAG”: “Finds exact terms and similar passages, combines the results, reranks them, and keeps citations.”
 >
-> Green card “RELATIONSHIP SEARCH — GRAPH RAG”: “Follows stored links, such as design question → drawing → work activity.”
+> Green card “Relationship search — Graph RAG”: “Follows verified links between RFIs, drawings, activities, quality issues, materials, and standards.”
 >
-> Orange card “TOOLS”: “Perform one approved lookup, comparison, relationship check, or calculation.”
+> Orange card “Approved tools”: “Search documents · get a record · inspect the graph · check schedule · compare revisions · calculate · assess standards evidence.”
 >
-> Purple card “AGENT — FUTURE”: “For a complex question, decides which approved tool to use next and when to stop.”
+> Purple card “ReAct agents”: “Document, Schedule, and Risk specialists choose tools, inspect observations, and stop within limits.”
 >
-> Teal card “MEMORY — MEM0”: “Remembers approved preferences and conversation context, never project facts.”
+> Teal card “Memory — Mem0”: “Stores approved display and routing preferences only. It does not store project facts.”
 >
-> Show the agent calling tools; tools use project search or relationship search; search reads from a gray foundation labeled “SOURCE OF TRUTH: current authorized project records and preserved originals”. Memory may provide preferences to the agent or direct search, but draw a red blocked line from memory to the source-of-truth foundation and label it “not project truth”. End every valid path at a gray-green result box: “Cited answer—or clearly not enough evidence”. Add a bottom note: “Current work focuses on data. Agent and memory implementation come later.” Avoid unexplained abbreviations beyond RAG, Graph RAG, and Mem0, which are explained in their cards.
+> Add a blue card “Sources of truth”: “PostgreSQL and preserved source files hold project records. Qdrant supports search. Neo4j holds verified relationships.” Show data preparation feeding the sources; RAG and Graph RAG retrieving evidence; tools exposing safe operations; ReAct agents choosing tools; and Mem0 adjusting presentation/routing only. End at “Grounded answer” with the rule: “Agents choose. Tools execute. Retrieval builds evidence. Answers cite sources — or stop when evidence is insufficient.” Do not use implementation-status badges.
 
 ## Refinements applied to generated images
 
@@ -101,4 +101,4 @@ The following edit prompts are part of the final prompt record.
 
 ### Responsibility map — correct component boundaries
 
-> Preserve the six cards and all wording. Draw data collection directly to the source of truth. Draw the future agent to tools only. Draw tools to project search and relationship search. Connect both search services to the source of truth. Keep memory connected to user/agent context and keep the red blocked line to the source of truth labelled “not project truth”. No direct connection may exist from agent or memory to the source of truth.
+> Preserve the cards and all wording. Draw data preparation directly to the sources of truth. Draw ReAct agents to approved tools only. Draw tools to project search and relationship search. Connect both search services to the sources of truth. Keep memory connected only to user/agent context. No direct connection may exist from an agent or memory to the source of truth.

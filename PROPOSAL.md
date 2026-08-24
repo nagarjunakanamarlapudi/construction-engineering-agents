@@ -2,29 +2,27 @@
 
 **Document date:** 23 August 2026
 **Pilot focus:** India-based building / structural-steel academic demonstration
-**Repository status:** Implemented and verified academic pilot
-**Implemented:** PostgreSQL, Qdrant, Neo4j, RAG, Graph RAG, bounded agents, typed read-only tools, controlled Mem0 preferences, evaluations, FastAPI, and Streamlit
 
-> **How to read this proposal:** “Implemented” describes behavior verified in this repository. “Target” describes approved production breadth that is not yet built. “Future” describes later work. Project records are synthetic and clearly labelled; BIS material is an official public preview, not the full Indian Standard.
+> **How to read this proposal:** The repository is a working academic pilot with PostgreSQL, Qdrant, Neo4j, RAG, Graph RAG, bounded ReAct agents, typed read-only tools, controlled Mem0 preferences, evaluations, FastAPI, and Streamlit. Only explicitly named production extensions are future work. Project records are synthetic and clearly labelled; BIS material is an official public preview, not the full Indian Standard.
 
 ## 1. Executive Summary
 
 Civil engineering projects generate large amounts of fragmented, versioned information across drawings, specifications, RFIs, submittals, schedules, contracts, meeting minutes, inspections, BIM models, and field reports. Teams lose time finding the authoritative source, connecting related records, and understanding how one issue affects downstream work.
 
-The **Civil Engineering Project Copilot** is an implemented evidence-first academic pilot that retrieves project information, connects related records, and explains its conclusions with citations. It combines conventional RAG, hybrid retrieval, controlled tools, and a project relationship map. Simple questions use direct retrieval; complex questions use a bounded Agentic RAG workflow.
+The **Civil Engineering Project Copilot** is an evidence-first academic pilot that retrieves project information, connects related records, and explains its conclusions with citations. It combines conventional RAG, hybrid retrieval, controlled tools, and a project relationship map. Simple questions use direct retrieval; complex questions use a bounded Agentic RAG workflow.
 
 The repository contains one **correlated synthetic India-based steel-building project** connected to clearly separated official public reference material. This provides enough controlled data to demonstrate direct RAG, relationships, tools, and agents without claiming that unrelated public samples form one real project. A future real-project pilot would validate the same design using authorized records.
 
-### Current repository truth
+### What the repository contains
 
-| Item | Status on 23 August 2026 |
+| Item | What is included |
 |---|---|
 | Four buildingSMART IFC models and one BCF sample | **Public — downloaded**; reusable technical samples, but not one Indian project |
 | BIS catalogue/search and public preview pages | **Public — downloaded** from official pages |
-| `data/public/bis/academic/INDEX.jsonl` | **Exists and indexed**; 138 labelled chunks in the portable corpus and live Qdrant collection |
+| `data/public/bis/academic/INDEX.jsonl` | 138 labelled chunks in the portable corpus and Qdrant collection |
 | Guwahati tender, Assam rules, and CPWD references | **Public — link only**; catalogued but not copied into the repository |
-| Correlated steel-building RFIs, revisions, schedule, materials, and inspections | **Synthetic — implemented**; 245 labelled project records |
-| PostgreSQL, Qdrant, Neo4j, RAG application, tools, agents, and Mem0 | **Implemented and verified** for the academic pilot |
+| Correlated steel-building RFIs, revisions, schedule, materials, and inspections | **Synthetic — academic demo**; 245 labelled project records |
+| Application stack | PostgreSQL, Qdrant, Neo4j, RAG, Graph RAG, ReAct agents, seven read-only tools, Mem0 preferences, FastAPI, Streamlit, Langfuse tracing, and evaluations |
 
 **Terminology note:** IS 800 is an Indian Standard and a structural-steel **code of practice**. It is not a “code of conduct,” which normally describes professional behavior. In this proposal, the umbrella label is **Indian codes and standards**.
 
@@ -68,18 +66,14 @@ The Copilot should function as a **project investigation partner**, not merely a
 - Autonomous engineering or safety decisions
 - Automatic changes to schedules, RFIs, or source systems
 - Full CAD/BIM geometric reasoning in the first release
-- Agent implementation before the data-readiness and correlation gates are met
+- Unbounded autonomous agents or agents with direct database access
 - Organization-wide rollout before a single-project pilot succeeds
 
 ## 5. Flagship Use Cases
 
-These are target product use cases. During the Data Foundation phase they are used to identify required records and relationships—not to justify building an agent prematurely.
+The pilot demonstrates four complementary ways to investigate the same project: direct evidence search, connected-record analysis, bounded ReAct investigation, and standards-evidence review.
 
-> **Figure status: MIXED TIMELINE.** Only the first column describes current repository files; the remaining columns describe planned or future capability.
-
-![Capability roadmap showing which questions are possible now and later](docs/images/submission-capability-roadmap.png)
-
-*Status: capability roadmap. “Available now” means file-based data demonstrations; the project-search and assisted-investigation columns are future work.*
+![Questions the Civil Engineering Project Copilot can answer](docs/images/submission-capability-overview.png)
 
 | Question | Required behavior |
 |---|---|
@@ -96,7 +90,7 @@ These are target product use cases. During the Data Foundation phase they are us
 
 ![Synthetic product mockup showing a direct RAG answer with evidence](docs/images/mockup-evidence-answer.png)
 
-*Status: early synthetic design mockup. The implemented Streamlit workspaces use the correlated academic demo records and the same evidence-first presentation rule.*
+*This is an early interface concept. The Streamlit workspaces use the correlated academic demo records and the same evidence-first presentation rule.*
 
 ## 6. Data Sources and Ingestion
 
@@ -110,24 +104,24 @@ This is the authoritative visual summary of data origin. In particular:
 
 - BIS material is labelled **Indian codes and standards — official public previews**;
 - no public preview is silently represented as the complete standard;
-- the synthetic steel-building project is planned, not downloaded; and
+- the synthetic steel-building project is generated locally and clearly labelled, not downloaded; and
 - authorized real-project data remains a future validation layer.
 
-### Where the prepared corpus is today
+### How project information becomes searchable evidence
 
-![Current file-based data preparation status before architecture selection](docs/images/current-data-preparation-status.png)
+![How project and public-reference information is prepared, indexed, and used](docs/images/searchable-evidence-pipeline.png)
 
-The word “index” in the filename `INDEX.jsonl` means an ordered JSON Lines file prepared for later retrieval. It does **not** mean that Qdrant, RAG, or an agent is running. The target database architecture has now been selected, but none of its services has been started or loaded.
+The corpus contains 245 correlated synthetic project records and 88 official BIS public-preview records. In the full prepared corpus, PostgreSQL holds 333 structured records, Qdrant holds 383 searchable chunks, and Neo4j holds 333 nodes with 460 provenance-backed relationships. The portable mode builds equivalent in-process stores for notebooks and tests. Mem0 remains separate and stores approved user preferences only—not project facts.
 
 ### Product mockup: data library
 
 ![Product mockup showing data provenance and the IS 800 preview boundary](docs/images/mockup-data-library.png)
 
-*Status: product mockup — not implemented. It demonstrates how a reviewer could inspect source provenance, licence/use labels, and project applicability before trusting a result.*
+*This interface concept shows how a reviewer can inspect source provenance, licence/use labels, and project applicability before trusting a result.*
 
-### Planned synthetic project layer
+### Correlated synthetic project layer
 
-The academic demo will create one internally consistent, clearly labelled synthetic project. Its records will share controlled identifiers so that the submission can demonstrate correlation without inventing links between unrelated public datasets. The minimum chain is:
+The academic demo contains one internally consistent, clearly labelled synthetic project. Its records share controlled identifiers so that the submission demonstrates correlation without inventing links between unrelated public datasets. Its main evidence chain is:
 
 > adopted-code register → design basis → drawing revisions → RFI and approval → schedule activity → material delivery → inspection/NCR → accepted work
 
@@ -172,7 +166,7 @@ Autodesk Construction Cloud, Procore, SharePoint/OneDrive, Primavera P6, Microso
 
 ## 7. High-Level System Architecture
 
-> **Architecture status:** The figures in this section show the approved target design. They explain responsibilities and information flow; they do not claim that the named components are running.
+The figures in this section describe the academic pilot directly. Production connectors, wider document parsing, human-approved write-back, and deployment against authorized project systems remain later extensions.
 
 ### Architecture input sources
 
@@ -194,27 +188,21 @@ The architecture has two distinct planes:
 
 Within the online plane, retrieval, agents, and tools are separate responsibilities: **agents choose, tools execute, and retrieval builds evidence**.
 
-> **Figure status: IMPLEMENTED FOR THE ACADEMIC PILOT.**
-
 ![Plain-language view separating information preparation and question answering](docs/images/submission-system-architecture.png)
 
-*Status: current separation of data preparation and question answering. Production connectors and wider document parsing remain future breadth.*
-
-> **Figure status: IMPLEMENTED CORE WITH FUTURE PRODUCTION BREADTH.**
+*The offline lane prepares trusted evidence; the online lane answers questions through retrieval, tools, and bounded agents. Production connectors and wider document parsing remain future breadth.*
 
 ![Civil Engineering Project Copilot system architecture](docs/images/civil-copilot-architecture-overview.png)
 
-*Status: the core stores, retrieval, graph, agents, tools, memory boundary, API, and UI are implemented. The data-origin figure in Section 6 governs which sources actually exist.*
+*The data-origin figure in Section 6 governs which sources actually exist; the architecture keeps synthetic project data and official public previews visibly separate.*
 
 ### 7.1 Data ingestion — offline write path
 
 Data ingestion is an asynchronous, repeatable pipeline. It acquires records from project sources, preserves originals, extracts content, normalizes metadata, tracks revisions, applies document-aware chunking, and publishes permission-aware knowledge. Failed parses and uncertain entity links go to a validation queue rather than silently entering the trusted indexes.
 
-> **Figure status: PROPOSED PRODUCTION INGESTION — NOT IMPLEMENTED.**
-
 ![Data ingestion architecture](docs/images/data-ingestion-architecture.png)
 
-*Status: proposed production ingestion design — not the current repository pipeline. The actual current path is the file-based preparation figure in Section 6.*
+*This figure describes the future production ingestion breadth. The academic pilot uses the repeatable local generation and indexing path shown in Section 6.*
 
 Key outputs are deliberately different:
 
@@ -227,19 +215,15 @@ Key outputs are deliberately different:
 
 Retrieval begins only after project scope and document permissions are known. The service extracts exact identifiers and metadata constraints, runs the appropriate retrieval methods, fuses and reranks candidates, and returns a structured evidence packet—not an answer.
 
-> **Figure status: IMPLEMENTED AND VERIFIED RAG.**
-
 ![Data retrieval architecture](docs/images/data-retrieval-architecture.png)
 
-*Status: current evidence path for exact, dense, hybrid, graph, and structured retrieval, with reranking and citations.*
+*Exact, dense, hybrid, graph, and structured retrieval all return source-linked evidence for reranking and citation.*
 
 The evidence packet contains the best passages, authoritative records, deterministic calculations, graph paths, and citation metadata. A simple lookup can use this service directly through Fast RAG. A compound investigation can call it several times through agent tools with different sub-questions and filters.
 
-> **Figure status: IMPLEMENTED ROUTING.**
+![Direct RAG compared with a controlled multi-step investigation](docs/images/submission-question-routing.png)
 
-![Direct RAG compared with a future controlled multi-step investigation](docs/images/submission-question-routing.png)
-
-*Status: current routing behavior. Simple questions use direct RAG; compound questions use the bounded agent path and are checked by route/tool evaluations.*
+*Simple questions use direct RAG; compound questions use the bounded agent path. Route, tool, grounding, and citation evaluations check both paths.*
 
 ### 7.3 Agents — reasoning and coordination
 
@@ -249,11 +233,9 @@ The query router is deterministic and sends simple questions to Fast RAG. Compou
 - **Schedule Agent:** activities, float, blockers, milestones, and scenario impact
 - **Risk Agent:** evidence-backed synthesis and ranking of validated issues
 
-> **Figure status: IMPLEMENTED AGENTIC RAG.**
-
 ![Agent orchestration architecture](docs/images/agent-orchestration-architecture.png)
 
-*Status: current agent design. LangChain `create_agent`, its LangGraph runtime, typed tools, bounded execution, checkpoints, and controlled Mem0 preferences are implemented.*
+*LangChain `create_agent`, its LangGraph runtime, typed tools, bounded execution, checkpoints, and controlled Mem0 preferences provide the agent path.*
 
 Agents can plan, decompose, select tools, inspect observations, and stop. They cannot bypass permission checks, access databases directly, or treat memory as authoritative project data. Working state remains in workflow checkpoints; Mem0 contributes only approved preferences and curated memory.
 
@@ -261,11 +243,9 @@ Agents can plan, decompose, select tools, inspect observations, and stop. They c
 
 Tools are deterministic, typed, permission-aware capabilities. They validate inputs, execute one bounded operation, and return a structured observation containing results, source identifiers, citations, confidence/errors, and timing.
 
-> **Figure status: IMPLEMENTED AND VERIFIED READ-ONLY TOOLS.**
-
 ![Tool architecture](docs/images/tools-architecture.png)
 
-*Status: current tool inventory. Every tool is typed, read-only, permission-aware, time-bounded, and available through the single registry.*
+*Every tool is typed, read-only, permission-aware, time-bounded, and available through the single registry.*
 
 The MVP tool catalog is read-only: document search, record lookup, graph traversal, schedule impact analysis, revision comparison, calculation, and a standards-evidence review. Future write actions require a preview, explicit human approval, and an audit record.
 
@@ -278,11 +258,7 @@ The `assess_standard_evidence` tool compares the project only with topics visibl
 
 The graph uses an explicit designation-and-edition map for code links. For example, `CODE-IS-800` links to `PUBLIC-BIS-bis-800`. These links are never inferred from fuzzy text similarity.
 
-> **Figure status: RESPONSIBILITY MAP.** Only the limited file preparation exists today; search, graph, tools, agent, and memory are proposed or future.
-
-![Responsibility map for data collection, RAG, Graph RAG, tools, agent, and memory](docs/images/submission-responsibility-map.png)
-
-*Status: responsibility map, not implementation status. Data preparation exists only in the limited file-based form shown in Section 6; every other block is proposed or future.*
+![Clear responsibilities for data preparation, RAG, Graph RAG, tools, agents, memory, and sources of truth](docs/images/component-responsibility-map.png)
 
 ### End-to-end query flow
 
@@ -338,39 +314,40 @@ Each graph edge must store its source, extraction method, confidence, and effect
 
 ## 10. Technology Decisions and Open Choices
 
-The project has fixed the application frameworks and operational approach below. This does not mean they are implemented; it means new design and code should use them consistently.
+The academic pilot uses the application frameworks and operational approach below.
 
-### Decisions now fixed
+### Technology stack
 
-| Need | Selected technology | How it will be used |
+| Need | Selected technology | How it is used |
 |---|---|---|
 | RAG components | **LangChain** | Document objects, loading/splitting adapters, embeddings, retrievers, prompts, models, and typed tools |
-| Multi-step workflow | **LangGraph** | Explicit state, bounded steps, evidence checks, retry/stop rules, checkpoints, and later human approval |
-| Observability and evaluations | **Langfuse Cloud initially** | Trace model calls, retrieval, tools, LangGraph steps, latency, cost, errors, and evaluation scores without adding the full self-hosted observability stack to the laptop |
+| Multi-step workflow | **LangGraph** | Explicit state, bounded steps, evidence checks, retry/stop rules, and durable PostgreSQL checkpoints |
+| Observability and evaluations | **Langfuse Cloud** | Trace model calls, retrieval, tools, LangGraph steps, latency, cost, errors, and evaluation scores |
 | Local reproducibility | **Docker Compose** | Start the application and selected supporting services consistently for reviewers |
 | Structured records | **PostgreSQL** | Authoritative RFIs, drawings, activities, revisions, permissions, ingestion state, audit data, and LangGraph checkpoints |
 | Document and vector retrieval | **Qdrant, self-hosted** | Exact identifiers, full-text and meaning-based search, metadata filters, hybrid result fusion, and chunk provenance |
 | Project relationship graph | **Neo4j Community** | Provenance-backed dependencies and multi-step paths between project records |
-| Long-term user memory | **Mem0 Platform** | Managed preference and conversation memory using the available credits; never authoritative project facts |
+| User preferences | **Mem0 Platform** | Approved display and routing preferences; never authoritative project facts |
+| API and services | **Python, FastAPI, Pydantic** | Typed application contracts, health checks, retrieval, chat, tools, memory, and evaluation endpoints |
+| Demonstration UI | **Streamlit** | Chat, impact exploration, revision evidence, quality review, tool traces, citations, and evaluation results |
 | Original-file storage | **Controlled local folders initially** | Preserve public and synthetic originals for the academic pilot; keep source references portable to future S3-compatible storage |
 
-Langfuse is the only project observability platform; LangSmith is not part of the planned stack. Docker Compose is the local and academic-demo deployment method for the application, PostgreSQL, Qdrant, and Neo4j. Mem0 and Langfuse are managed services for the first implementation. A production deployment can be reconsidered later.
+Langfuse is the only project observability platform; LangSmith is not part of the stack. Docker Compose runs the application, PostgreSQL, Qdrant, and Neo4j locally. Mem0 and Langfuse are managed services for the academic pilot. A production deployment can be reconsidered later.
 
 ### How the course repositories influence this project
 
 - [Week 2 Session 1](https://github.com/The-Gen-Academy/Mastering-Agentic-AI-Week2-Session1) supplies the learning progression: basic RAG, metadata filtering, and hybrid vector-plus-BM25 retrieval.
 - [Week 2 Session 2](https://github.com/The-Gen-Academy/Mastering-Agentic-AI-Week2-Session2) supplies the source-specific retriever-tool, question-routing, decomposition, tool-loadout, and Graph RAG patterns.
-- The Session 2 Agentic RAG tutorial intentionally uses one LangChain `create_agent` without LangGraph. This project will keep that simple idea for narrowly scoped routing, while using LangGraph where a construction investigation needs explicit state, limits, evidence checks, interruption, or approval.
+- The Session 2 Agentic RAG tutorial intentionally uses one LangChain `create_agent` without a hand-written graph. This project uses that pattern for the Document, Schedule, and Risk specialists, while LangGraph supplies state, limits, evidence checks, interruption, and checkpoints.
 - Tutorial storage choices such as Pinecone and Chroma remain examples. This project instead uses self-hosted Qdrant for retrieval and Neo4j Community for graph traversal.
 
 ### Choices still open
 
-The remaining table contains implementation details that do not need to be fixed before the synthetic corpus and database contracts are designed. The background queue and remote object storage should be added only when a demonstrated workload requires them.
+The remaining choices concern production breadth rather than the academic pilot. A background queue, richer parser stack, different web framework, or remote object storage should be added only when a demonstrated workload requires them.
 
 | Layer | Candidate technology | Rationale |
 |---|---|---|
-| Web experience | Next.js / React | Familiar document-centric UI, streaming answers, evidence panels, and graph views |
-| API and services | Python, FastAPI, Pydantic | Strong document/AI ecosystem and explicit typed service contracts |
+| Future web experience | Next.js / React | Consider only if a production deployment outgrows Streamlit |
 | Parsing / OCR | Docling or Unstructured, PyMuPDF, OCR engine | Layout-aware extraction with source coordinates; adapters keep parsers replaceable |
 | Future models | Provider-neutral model gateway | Deferred; later allows hosted or private LLM, embedding, and reranking models based on data policy |
 | Background work | Direct jobs initially; Redis-backed worker only when needed | Avoid another service until scheduled synchronization, retryable OCR, or parallel ingestion demonstrates the need |
@@ -382,7 +359,7 @@ Production cloud and model providers should remain deployment decisions, because
 
 ## 11. Agent and Tool Boundaries
 
-The current implementation uses a small read-only agentic demonstration and compares it with direct RAG rather than assuming the longer path is better. Its registered tools are:
+The read-only agent path is evaluated against direct RAG rather than assuming the longer path is better. Its registered tools are:
 
 - `search_documents(query, filters)`
 - `get_record(type, id, as_of_date)`
@@ -407,7 +384,7 @@ The application chooses the preference fields and validates their values; Mem0 d
 
 ## 13. Evaluation and Safety
 
-Evaluation starts with the data itself. Before retrieval or prompts are tuned, measure source reconciliation, identity coverage, revision completeness, relationship precision, provenance, and permission enforcement. Later, create a versioned retrieval set from real pilot questions covering exact lookup, semantic retrieval, multi-document synthesis, temporal/version questions, dependency traversal, unanswerable questions, and permission boundaries.
+Evaluation starts with the data itself. The versioned scenario set covers exact lookup, semantic retrieval, multi-document synthesis, temporal/version questions, dependency traversal, standards evidence, unanswerable questions, and permission boundaries. Live evaluation can later add questions from an authorized project pilot.
 
 ### Metrics
 
@@ -422,48 +399,48 @@ Evaluation starts with the data itself. Before retrieval or prompts are tuned, m
 - Citation validity, citation coverage, and answer faithfulness
 - Expert-rated correctness, completeness, and usefulness
 - Graph-path accuracy and schedule calculation agreement
-- Future agent tool-selection success and unnecessary-step rate
+- Agent tool-selection success, convergence, and unnecessary-step rate
 - p50/p95 latency, token usage, and cost per question
 - Permission leakage rate and audit completeness
 
 Safety controls include source-level access filtering, prompt-injection-resistant parsing, file scanning, tool allowlists, output citations, abstention when evidence is insufficient, and clear warnings for engineering, safety, commercial, and contractual judgments.
 
-## 14. Phased Implementation Plan
+## 14. Delivery Phases
 
-### Phase 0 — Align the academic pilot and architecture
+### Phase 0 — Scope and architecture
 
-- Fix the synthetic India-based steel-building scope, names, dates, locations, work packages, and demonstration questions.
-- Approve the data-origin and component-status legend used throughout this proposal.
-- Use the approved PostgreSQL + Qdrant + Neo4j data stack; keep agent and memory implementation as later phases.
-- Define a fictional adopted-code register for the synthetic project and label it as demonstration data. Do not present it as a professional compliance decision.
+- One India-based logistics steel-building project anchors the academic demonstration.
+- Data-origin labels distinguish synthetic project records, official public previews, downloaded reusable samples, and link-only references.
+- PostgreSQL, Qdrant, and Neo4j have separate authoritative-record, retrieval, and relationship responsibilities.
+- The adopted-code register is fictional demonstration data and is never presented as a professional compliance decision.
 
-### Phase 1 — Complete public collection and create correlated synthetic data
+### Phase 1 — Data foundation
 
-- Preserve the downloaded public originals, manifests, checksums, source URLs, licences, and content-scope labels.
-- Create the synthetic drawing register/revisions, RFIs/approvals, schedule/progress, materials, inspections, NCRs, and handover records as one coherent project.
-- Give every synthetic record an explicit data-origin label and stable cross-record identifiers.
-- Deliberately include a few missing, conflicting, superseded, and access-restricted cases for evaluation.
+- Public originals, manifests, checksums, source URLs, licences, and content-scope labels are preserved.
+- Drawing revisions, RFIs, approvals, schedule/progress, materials, inspections, NCRs, and handover records form one coherent synthetic project.
+- Stable identifiers connect records across domains while preserving their origin.
+- Missing, conflicting, superseded, and access-restricted cases support evaluation.
 
-### Phase 2 — Normalize and correlate
+### Phase 2 — Retrieval and relationships
 
-- Establish the canonical project, organization, WBS/CBS, package, location, asset, document, activity, cost, vendor, material, inspection, and code identifiers.
-- Apply authoritative and deterministic relationships first; keep rule-assisted links reviewable and model-suggested links untrusted.
-- Reconcile the synthetic current/superseded revisions, schedule relationships, quantities, material traceability, and approval/inspection chains against the synthetic ground truth.
-- Gate completion on the data-readiness measures in [Data Foundation](docs/DATA_FOUNDATION.md).
+- Canonical project, organization, package, location, document, activity, material, inspection, and code identifiers provide the correlation spine.
+- Exact search, BM25, dense retrieval, hybrid fusion, metadata filters, reranking, graph traversal, and citations share the same permission context.
+- Current and superseded revisions, schedule relationships, material traceability, and inspection chains reconcile with the synthetic ground truth.
+- Every trusted relationship retains its provenance.
 
-### Phase 3 — Deterministic retrieval and evidence evaluation
+### Phase 3 — Tools, ReAct agents, and memory
 
-- Load only trusted, versioned, permission-aware records and provenance-backed relationships into the selected retrieval layer.
-- Evaluate exact-ID lookup, metadata filtering, hybrid retrieval, reranking, graph paths, citations, and `as_of_date` behavior.
-- Build an expert-reviewed question/evidence set and inspect retrieved evidence without an agent loop.
-- Establish the deterministic quality, latency, and permission baseline.
+- Seven typed `@tool` capabilities expose read-only search, record, graph, schedule, revision, calculation, and standards-evidence operations.
+- LangChain `create_agent` supplies Document, Schedule, and Risk ReAct specialists with role-specific tool allowlists.
+- Shared limits bound steps, time, cost, retries, and repeated calls; unsafe or unsupported paths stop clearly.
+- PostgreSQL checkpoints retain conversation workflow state; Mem0 retains only approved user preferences.
 
-### Phase 4 — Tools, then optional agents
+### Phase 4 — Application and evaluation
 
-- Add read-only document, record, graph, schedule, comparison, and calculation tools only after the data contracts are stable.
-- Build one bounded Agentic RAG/ReAct demonstration for a multi-step delay or impact question after direct RAG works.
-- Require measurable improvement over the deterministic baseline before retaining agent workflows.
-- Evaluate Mem0 only for approved preferences and conversation continuity, never as project truth.
+- FastAPI exposes health, chat, retrieval, graph, standards, memory, and evaluation operations.
+- Streamlit provides chat, impact, revision, quality, citations, project paths, tool traces, and evaluation panels.
+- Portable notebooks demonstrate the concepts independently and reuse production code for the full application walkthrough.
+- Route, retrieval, reranking, grounding, citation, tool, agent, permission, latency, and cost checks provide regression gates.
 
 ### Phase 5 — Future authorized-project validation
 
@@ -473,7 +450,7 @@ Safety controls include source-level access filtering, prompt-injection-resistan
 
 ## 15. Success Criteria
 
-Initial targets should be finalized during Phase 0. The synthetic Data Foundation is ready for deterministic retrieval when:
+The synthetic Data Foundation and application are assessed against these criteria:
 
 - 100% of published records retain source system, source ID, checksum/version, timestamps, and ACL scope.
 - Every in-scope record type has a defined source and precedence rule within the synthetic ground truth.
@@ -485,7 +462,7 @@ Initial targets should be finalized during Phase 0. The synthetic Data Foundatio
 - No model-suggested relationship is published as trusted data without confirmation.
 - Zero cross-project or unauthorized-record leakage occurs in the test dataset, including deliberately restricted synthetic records.
 
-Later retrieval and product targets are:
+Retrieval and product targets are:
 
 - At least **90% exact-ID retrieval success** for known RFIs, submittals, activities, and drawing identifiers.
 - At least **85% gold-evidence Recall@10** across the evaluation set.
@@ -497,17 +474,16 @@ Later retrieval and product targets are:
 
 ## 16. Open Questions and Risks
 
-### Questions to resolve during discovery
+### Questions for a future authorized-project pilot
 
-1. What exact synthetic building, location, timeline, and structural-steel package should anchor the academic demo?
-2. Which record types are authoritative, and how are superseded documents marked today?
-3. Which future India-based project could later supply an authorized validation package?
-4. Which state/UT, ULB, fire authority, contract, and design date determine the applicable code register?
-5. Which project/WBS/CBS/location/asset identifiers can serve as the correlation spine across systems?
-6. Which roles and record-level permissions must be preserved?
-7. Which export/API limitations prevent full revision, attachment, schedule, cost, or status history from being collected?
-8. Is the imported schedule authoritative, and which export preserves the required baselines and relationships?
-9. Which high-value correlations are explicitly stored today, and which require mapping or human validation?
+1. Which India-based project can supply an authorized validation package?
+2. Which record types are authoritative, and how are superseded documents marked?
+3. Which state/UT, ULB, fire authority, contract, and design date determine the applicable code register?
+4. Which project/WBS/CBS/location/asset identifiers form the correlation spine across real systems?
+5. Which roles and record-level permissions must be preserved?
+6. Which export/API limitations prevent full revision, attachment, schedule, cost, or status history from being collected?
+7. Which schedule export preserves authoritative baselines and relationships?
+8. Which high-value correlations are explicit, and which require mapping or human validation?
 
 ### Principal risks and mitigations
 
@@ -518,17 +494,17 @@ Later retrieval and product targets are:
 | Incorrect entity links | Provenance and confidence on edges; human verification for high-impact links |
 | Hallucinated conclusions | Evidence-only prompts, claim-level citations, abstention, and deterministic calculations |
 | Permission leakage | Apply source ACLs before retrieval and include adversarial permission tests |
-| Agentic capability is absent from the course submission | Create the correlated synthetic project, direct-RAG baseline, and one bounded multi-step agent demonstration in that order |
+| Agent path loops, chooses a poor tool, or adds no value | Bound steps/time/cost, use role allowlists, expose observations, evaluate trajectories, and retain the direct-RAG baseline |
 | Weak evaluation data | Build the expert-reviewed question set before optimization and expand it from pilot failures |
 | Liability or overreliance | Clear decision-support positioning, user verification, audit trails, and no autonomous field actions |
 
-## 17. Recommended Starting Point
+## 17. Current Vertical Slice and Next Validation
 
-Begin with one clearly labelled synthetic India-based project and one coherent **data chain**:
+The academic pilot centres on one clearly labelled synthetic India-based project and one coherent **data chain**:
 
 > **For one structural-steel work package, connect the governing code and specification to design calculations, drawing/model revisions, RFIs and approvals, BOQ/procurement and material traceability, schedule/progress, fabrication/erection, inspections/NDT/NCRs, and handover evidence.**
 
-This vertical slice first proves collection completeness, version history, canonical identifiers, end-to-end correlations, permissions, and provenance. Then build direct RAG, followed by read-only tools and one bounded agentic demonstration. A later authorized-project pilot validates whether the academic design works with real operational data.
+This vertical slice demonstrates collection completeness, version history, canonical identifiers, end-to-end correlations, permissions, provenance, direct RAG, Graph RAG, read-only tools, bounded ReAct agents, memory boundaries, and evaluations. The next validation step is to run the same schemas and tests against a permission-controlled extract from an authorized real project.
 
 ## Technology References
 
