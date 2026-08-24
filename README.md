@@ -10,13 +10,18 @@ An evidence-grounded RAG and Agentic AI demonstration for a connected Indian str
 - **Hybrid retrieval and reranking:** exact identifiers plus meaning-based search, then best evidence first.
 - **Graph RAG:** verified dependency and traceability paths in Neo4j.
 - **Agentic RAG:** a bounded LangGraph plan using read-only tools.
+- **Indian-standards evidence:** one bounded tool compares seven IS 800 preview topics with project records without claiming compliance.
 - **Memory:** managed Mem0 stores approved user preferences only, never project facts.
-- **Evaluation:** six gold scenarios test retrieval, routes, tools, grounding, and abstention.
+- **Evaluation:** seven gold scenarios test retrieval, routes, tools, grounding, and abstention.
 - **Four user experiences:** chat, impact exploration, revision comparison, and quality investigation.
 
 The app uses official public BIS preview/catalogue data and buildingSMART samples alongside a clearly labelled `SYNTHETIC — ACADEMIC DEMO` project. Public previews are not represented as the full text of Indian Standards.
 
 ![Grounded answer and visible tool trace](docs/images/screenshots/05-grounded-chat-trace.png)
+
+The Streamlit command center presents every result in the same order: **What we found**,
+**Why**, **What is affected**, and **Supporting evidence**. Database fields, ranking details,
+graph paths, and structured tool activity remain available under **Investigation details**.
 
 ## Quick start
 
@@ -49,7 +54,7 @@ make ui
 Open:
 
 - Application: <http://127.0.0.1:8501>
-- API documentation: <http://127.0.0.1:8001/docs>
+- API documentation: <http://127.0.0.1:8011/docs>
 - Langfuse: <http://127.0.0.1:3000>
 - Neo4j Browser: <http://127.0.0.1:7474>
 
@@ -66,7 +71,7 @@ make eval-live
 make notebooks
 ```
 
-The reproducible offline baseline passes all six scenarios with 100% route accuracy, citation coverage, and abstention accuracy. The detailed output is stored in [`data/evals/report.json`](data/evals/report.json); live-service output is stored separately in [`data/evals/report-live.json`](data/evals/report-live.json).
+The reproducible offline baseline passes all seven scenarios with 100% route accuracy, citation coverage, and abstention accuracy. The detailed output is stored in [`data/evals/report.json`](data/evals/report.json); live-service output is stored separately in [`data/evals/report-live.json`](data/evals/report-live.json).
 
 ## Learn and present
 
@@ -77,7 +82,8 @@ The reproducible offline baseline passes all six scenarios with 100% route accur
 - [Indian standards scope](docs/INDIAN_STANDARDS_REGISTER.md)
 - [Public data catalogue](docs/PUBLIC_DATA_CATALOG.md)
 - [Data foundation and provenance](docs/DATA_FOUNDATION.md)
-- [Five reusable notebooks](notebooks/)
+- [Deferred product backlog](docs/BACKLOG.md)
+- [Seven reusable notebooks](notebooks/)
 
 The notebooks import the same production modules used by the API and UI; they are small experiments, not a second implementation.
 
@@ -91,7 +97,7 @@ The notebooks import the same production modules used by the API and UI; they ar
 | PostgreSQL | Authoritative structured project records |
 | Qdrant | Vector and filtered document retrieval |
 | Neo4j | Project dependency and traceability graph |
-| Mem0 | Allowlisted user preferences only |
+| Mem0 | One current allowlisted preference per user + project + preference type |
 | Langfuse | Self-hosted traces and evaluation visibility |
 
 This is an academic decision-support demonstration. It does not approve designs, direct construction work, certify compliance, or replace a competent professional.

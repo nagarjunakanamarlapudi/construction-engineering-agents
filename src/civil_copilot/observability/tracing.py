@@ -2,15 +2,34 @@
 
 from __future__ import annotations
 
-from contextlib import nullcontext
-from dataclasses import dataclass
-from typing import Any
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager, nullcontext
+from contextvars import ContextVar
+from dataclasses import dataclass, field
+from typing import Any, Literal
+from uuid import uuid4
 
 from langfuse import Langfuse
+from langfuse.langchain import CallbackHandler
+from pydantic import BaseModel
 
 from civil_copilot.config import Settings
 
 SENSITIVE_KEY_PARTS = ("key", "secret", "password", "authorization", "token", "credential")
+
+
+class TraceReference(BaseModel):
+    """Safe public pointer to a trace without exposing trace payloads or credentials."""
+
+    provider: Literal["none", "local", "langfuse"] = "none"
+    trace_id: str | None = None
+    url: str | None = None
+
+
+@dataclass(frozen=True)
+class TracingRun:
+    callbacks: tuple[Any, ...]
+    reference: TraceReference
 
 
 def redact_trace_payload(
@@ -41,6 +60,18 @@ def redact_trace_payload(
 class TracingBundle:
     enabled: bool
     client: Langfuse | None = None
+    callback_handler: Any | None = None
+    callback_factory: Callable[[dict[str, str]], Any] | None = None
+    _active_run: ContextVar[TracingRun | None] = field(
+        default_factory=lambda: ContextVar("civil_copilot_active_trace_run", default=None),
+        repr=False,
+    )
+
+    def callbacks(self) -> tuple[Any, ...]:
+        active = self._active_run.get()
+        if active is not None:
+            return active.callbacks
+        return (self.callback_handler,) if self.callback_handler is not None else ()
 
     def flush(self) -> None:
         if self.client:
@@ -54,6 +85,55 @@ class TracingBundle:
             input=redact_trace_payload(input_payload),
         )
 
+    def reference(self, trace_id: str | None = None) -> TraceReference:
+        return TraceReference(trace_id=trace_id)
+
+    @contextmanager
+    def run(self, name: str, input_payload: Any = None) -> Iterator[TracingRun]:
+        """Create one real run boundary and expose only its safe public reference."""
+
+        if not self.client:
+            active = TracingRun(
+                callbacks=(),
+                reference=TraceReference(
+                    provider="local",
+                    trace_id=f"local-run-{uuid4()}",
+                ),
+            )
+            token = self._active_run.set(active)
+            try:
+                yield active
+            finally:
+                self._active_run.reset(token)
+            return
+
+        trace_id = self.client.create_trace_id()
+        trace_context = {"trace_id": trace_id}
+        callback = (
+            self.callback_factory(trace_context)
+            if self.callback_factory is not None
+            else self.callback_handler
+        )
+        reference = TraceReference(
+            provider="langfuse",
+            trace_id=trace_id,
+            url=self.client.get_trace_url(trace_id=trace_id),
+        )
+        active = TracingRun(
+            callbacks=(callback,) if callback is not None else (),
+            reference=reference,
+        )
+        token = self._active_run.set(active)
+        try:
+            with self.client.start_as_current_span(
+                trace_context=trace_context,
+                name=name,
+                input=redact_trace_payload(input_payload),
+            ):
+                yield active
+        finally:
+            self._active_run.reset(token)
+
 
 def create_tracing(settings: Settings) -> TracingBundle:
     if not settings.langfuse_public_key or not settings.langfuse_secret_key:
@@ -66,4 +146,16 @@ def create_tracing(settings: Settings) -> TracingBundle:
         debug=settings.langfuse_debug,
         mask=redact_trace_payload,
     )
-    return TracingBundle(enabled=True, client=client)
+    return TracingBundle(
+        enabled=True,
+        client=client,
+        callback_handler=CallbackHandler(
+            public_key=settings.langfuse_public_key.get_secret_value(),
+            update_trace=True,
+        ),
+        callback_factory=lambda trace_context: CallbackHandler(
+            public_key=settings.langfuse_public_key.get_secret_value(),
+            update_trace=True,
+            trace_context=trace_context,
+        ),
+    )

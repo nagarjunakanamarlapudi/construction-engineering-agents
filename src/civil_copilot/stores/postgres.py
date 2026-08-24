@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 
 import psycopg
@@ -11,6 +12,7 @@ from civil_copilot.data.models import ProjectRecord
 from civil_copilot.stores.base import WriteStats, model_fingerprint
 
 SCHEMA = Path(__file__).resolve().parents[3] / "sql" / "schema.sql"
+STORE_TIMEOUT_SECONDS = 1
 
 
 class PostgresRecordStore:
@@ -19,7 +21,11 @@ class PostgresRecordStore:
         self.initialize()
 
     def _connect(self) -> psycopg.Connection:
-        return psycopg.connect(self.database_url)
+        return psycopg.connect(
+            self.database_url,
+            connect_timeout=STORE_TIMEOUT_SECONDS,
+            options=f"-c statement_timeout={STORE_TIMEOUT_SECONDS * 1000}",
+        )
 
     def initialize(self) -> None:
         with self._connect() as connection, connection.cursor() as cursor:
@@ -104,4 +110,53 @@ class PostgresRecordStore:
         query += " ORDER BY record_id"
         with self._connect() as connection, connection.cursor() as cursor:
             cursor.execute(query, params)
+            return [ProjectRecord.model_validate(row[0]) for row in cursor.fetchall()]
+
+    def query_records(
+        self,
+        *,
+        project_id: str,
+        access_scopes: list[str],
+        record_ids: list[str] | None = None,
+        record_types: list[str] | None = None,
+        statuses: list[str] | None = None,
+        as_of_date: date | None = None,
+        metadata_filters: dict[str, object] | None = None,
+        limit: int = 100,
+    ) -> list[ProjectRecord]:
+        """Read authorized records with filters enforced by PostgreSQL."""
+
+        if not access_scopes or limit < 1:
+            return []
+        clauses = [
+            "project_id = %(project_id)s",
+            "access_scopes ?| %(access_scopes)s",
+        ]
+        parameters: dict[str, object] = {
+            "project_id": project_id,
+            "access_scopes": access_scopes,
+            "limit": min(limit, 500),
+        }
+        if record_ids:
+            clauses.append("record_id = ANY(%(record_ids)s)")
+            parameters["record_ids"] = record_ids
+        if record_types:
+            clauses.append("record_type = ANY(%(record_types)s)")
+            parameters["record_types"] = record_types
+        if statuses:
+            clauses.append("status = ANY(%(statuses)s)")
+            parameters["statuses"] = statuses
+        if as_of_date is not None:
+            clauses.append("effective_date <= %(as_of_date)s")
+            parameters["as_of_date"] = as_of_date
+        if metadata_filters:
+            clauses.append("metadata @> %(metadata_filters)s::jsonb")
+            parameters["metadata_filters"] = json.dumps(metadata_filters)
+        where_clause = " AND ".join(clauses)
+        query = (
+            f"SELECT payload FROM project_records WHERE {where_clause} "  # noqa: S608  # nosec B608
+            "ORDER BY effective_date DESC, record_id LIMIT %(limit)s"
+        )
+        with self._connect() as connection, connection.cursor() as cursor:
+            cursor.execute(query, parameters)
             return [ProjectRecord.model_validate(row[0]) for row in cursor.fetchall()]

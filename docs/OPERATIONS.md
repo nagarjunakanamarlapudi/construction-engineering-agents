@@ -34,12 +34,14 @@ Langfuse is self-hosted here, but its ingestion API still authenticates an appli
 
 The current Mem0 SDK scopes the API key to the account/project. Only `MEM0_API_KEY` is required. Legacy organization/project ID variables are intentionally absent.
 
+A preference has one application key: `(user_id, project_id, preference_type)`. PostgreSQL stores the Mem0-generated memory ID for that key. The first save uses Mem0 `add`; changing the same preference uses Mem0 `update`, so the dashboard should show one current memory instead of a new entry for every change. The application supplies the validated key and value with inference disabled; Mem0 does not extract project facts from chat.
+
 ## Ports
 
 | Service | Local address / port |
 |---|---|
 | Streamlit UI | `127.0.0.1:8501` |
-| FastAPI | `127.0.0.1:8001` |
+| FastAPI | `127.0.0.1:8011` |
 | Langfuse | `127.0.0.1:3000` |
 | PostgreSQL | `127.0.0.1:55432` |
 | Qdrant HTTP / gRPC | `127.0.0.1:6333` / `6334` |
@@ -121,7 +123,7 @@ Docker volumes are retained. Shutdown does not delete project data or traces.
 Run `docker compose ps` and `docker compose -f compose.observability.yaml ps`. Wait for health checks, then retry.
 
 **The UI opens but chat fails**  
-Confirm the API is running at <http://127.0.0.1:8001/health>. The application uses `127.0.0.1` intentionally to avoid a local IPv6 `localhost` conflict.
+Confirm the API is running at <http://127.0.0.1:8011/health>. The application uses `127.0.0.1` intentionally to avoid a local IPv6 `localhost` conflict and port `8011` to avoid the existing DynamoDB service on `8001`.
 
 **Mem0 dashboard shows zero memories**  
 Save an allowlisted preference in the UI, select the correct Mem0 project, and refresh. Project facts are rejected by policy, so normal RAG answers do not create memories.

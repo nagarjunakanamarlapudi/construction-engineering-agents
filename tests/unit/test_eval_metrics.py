@@ -1,6 +1,10 @@
+import pytest
+
 from civil_copilot.evals.metrics import (
     abstention_accuracy,
     citation_coverage,
+    normalized_discounted_cumulative_gain,
+    paired_reranker_ndcg,
     recall_at_k,
     reciprocal_rank,
     route_accuracy,
@@ -16,6 +20,19 @@ def test_retrieval_metrics_match_hand_calculated_examples():
     assert recall_at_k(retrieved, relevant, k=3) == 1 / 3
     assert recall_at_k(retrieved, relevant, k=4) == 2 / 3
     assert reciprocal_rank(retrieved, relevant) == 1 / 2
+
+
+def test_ndcg_and_paired_reranker_lift_match_hand_calculated_rankings():
+    relevance = {"A": 0.0, "B": 1.0, "C": 0.0, "D": 1.0}
+    hybrid = ["A", "B", "C", "D"]
+    reranked = ["B", "D", "A", "C"]
+
+    paired = paired_reranker_ndcg(hybrid, reranked, relevance, k=4)
+
+    assert normalized_discounted_cumulative_gain(reranked, relevance, k=4) == 1.0
+    assert paired.hybrid_ndcg == pytest.approx(0.6509209298)
+    assert paired.reranked_ndcg == 1.0
+    assert paired.lift == pytest.approx(0.3490790702)
 
 
 def test_grounding_route_tool_and_efficiency_metrics_are_bounded_and_exact():

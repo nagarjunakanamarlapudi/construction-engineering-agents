@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help setup services-up services-down observability-up observability-down up down health credentials test lint format security \
+.PHONY: help setup services-up services-down observability-up observability-down up down health credentials test lint format security e2e e2e-live \
 	data-download data-generate data-validate data-status ingest reindex reindex-docs \
 	reindex-graph reset-indexes eval eval-live notebooks api ui
 
@@ -22,10 +22,22 @@ observability-up: ## Start the self-hosted Langfuse observability stack
 observability-down: ## Stop self-hosted Langfuse without deleting traces
 	docker compose -f compose.observability.yaml down
 
-up: services-up ## Start all backend services and print app commands
-	@echo "Run 'make api' and 'make ui' in separate terminals."
+up: ## Build and start databases, API, and UI
+	docker compose up -d --build postgres qdrant neo4j api ui
 
 down: services-down ## Stop the local stack without deleting data
+
+e2e: ## Run repeatable portable routes, notebooks, UI contracts, and evaluation gates
+	$(MAKE) notebooks
+	uv run pytest tests/e2e tests/notebooks tests/ui tests/unit/test_api.py -q
+	$(MAKE) eval
+
+e2e-live: ## Start the stack, index data, and verify configured databases, model, API, and evals
+	$(MAKE) up
+	$(MAKE) health
+	$(MAKE) ingest
+	RUN_DATABASE_INTEGRATION=1 uv run pytest tests/integration tests/e2e tests/ui tests/unit/test_api.py -q
+	$(MAKE) eval-live
 
 health: ## Verify databases and application dependencies
 	uv run python scripts/check_services.py
@@ -80,13 +92,13 @@ eval: ## Run the reproducible offline RAG and agent evaluation baseline
 	uv run python -m civil_copilot.evals.runner
 
 eval-live: ## Run the same evaluation through configured live model and services
-	uv run python -m civil_copilot.evals.runner --live
+	COPILOT_RUNTIME_MODE=live uv run python -m civil_copilot.evals.runner --live
 
 notebooks: ## Execute all teaching notebooks headlessly
 	uv run jupyter nbconvert --execute --to notebook --inplace notebooks/*.ipynb
 
-api: ## Start the FastAPI backend on port 8001
-	uv run uvicorn civil_copilot.api.main:app --reload --port 8001
+api: ## Start the FastAPI backend on port 8011
+	COPILOT_RUNTIME_MODE=live uv run uvicorn civil_copilot.api.main:app --reload --port 8011
 
 ui: ## Start the Streamlit UI on port 8501
 	uv run streamlit run src/civil_copilot/ui/app.py --server.port 8501

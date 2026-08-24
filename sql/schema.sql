@@ -23,3 +23,12 @@ CREATE INDEX IF NOT EXISTS project_records_status_idx
     ON project_records (project_id, status);
 CREATE INDEX IF NOT EXISTS project_records_metadata_gin_idx
     ON project_records USING GIN (metadata);
+
+CREATE TABLE IF NOT EXISTS preference_memory_index (
+    user_id TEXT NOT NULL,
+    project_id TEXT NOT NULL,
+    preference_type TEXT NOT NULL,
+    mem0_memory_id TEXT NOT NULL UNIQUE,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, project_id, preference_type)
+);

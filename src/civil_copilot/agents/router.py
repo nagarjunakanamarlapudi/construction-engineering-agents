@@ -28,6 +28,13 @@ class QuestionRouter:
         if request.route_override:
             route = request.route_override
             reason = "The user selected this demonstration route."
+        elif "is 800" in question and any(
+            term in question for term in ("compare", "evidenced", "needs review", "practices")
+        ):
+            route = "agentic_rag"
+            reason = (
+                "The question compares project evidence with an indexed official public preview."
+            )
         elif any(term in question for term in ("why ", "what changed", "remain open", "closes")):
             route = "agentic_rag"
             reason = "The question combines causes, changes, or closure evidence."

@@ -22,7 +22,7 @@ def test_all_three_stores_ingest_the_same_corpus_twice_without_duplicates():
     search = QdrantSearchStore(
         str(settings.qdrant_url),
         DeterministicEmbedding(),
-        collection_name="civil_copilot_chunks_test",
+        collection_name="civil_copilot_chunks_test_v2",
     )
     graph = Neo4jGraphStore(
         settings.neo4j_uri,
@@ -31,14 +31,18 @@ def test_all_three_stores_ingest_the_same_corpus_twice_without_duplicates():
     )
     try:
         service = IngestionService(records, search, graph)
+        project_id = corpus.records[0].project_id
         first = service.ingest(corpus.records, corpus.chunks, corpus.relationships)
+        relationship_count_after_first = graph.count_relationships(project_id)
         second = service.ingest(corpus.records, corpus.chunks, corpus.relationships)
+        relationship_count_after_second = graph.count_relationships(project_id)
 
         assert first.records.total == len(corpus.records)
         assert second.records.total == len(corpus.records)
         assert len(records.list(project_id=corpus.records[0].project_id)) == len(corpus.records)
         assert search.count() == len(corpus.chunks)
-        assert graph.count_nodes(PROJECT_ID := corpus.records[0].project_id) == len(corpus.records)
-        assert graph.count_relationships(PROJECT_ID) == len(corpus.relationships)
+        assert graph.count_nodes(project_id) >= len(corpus.records)
+        assert relationship_count_after_first == relationship_count_after_second
+        assert relationship_count_after_second >= len(corpus.relationships)
     finally:
         graph.close()

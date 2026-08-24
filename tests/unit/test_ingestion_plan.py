@@ -42,3 +42,19 @@ def test_ingestion_rejects_dangling_relationship_before_any_store_write():
     assert not record_store.records
     assert not search_store.chunks
     assert not graph_store.relationships
+
+
+def test_ingestion_populates_missing_chunk_date_from_its_authoritative_record():
+    corpus = generate_demo_project(seed=800)
+    source_chunk = next(chunk for chunk in corpus.chunks if chunk.record_id == "RFI-087")
+    source_record = next(record for record in corpus.records if record.record_id == "RFI-087")
+    assert source_chunk.effective_date is None
+
+    search_store = InMemorySearchStore()
+    IngestionService(
+        InMemoryRecordStore(),
+        search_store,
+        InMemoryGraphStore(),
+    ).ingest(corpus.records, corpus.chunks, corpus.relationships)
+
+    assert search_store.chunks[source_chunk.chunk_id].effective_date == source_record.effective_date

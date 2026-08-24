@@ -241,6 +241,7 @@ def generate_demo_project(seed: int = 800) -> Corpus:
                     "level": level,
                     "zone": (number - 1) % 6 + 1,
                     "critical": number in {8, 9, 10, 11},
+                    "total_float_days": 0 if number in {8, 9, 10, 11} else 2,
                 },
             )
         )
@@ -571,5 +572,26 @@ def default_gold_scenarios() -> list[GoldScenario]:
             expected_evidence_ids=["NCR-005", "NCR-006"],
             expected_tools=["query_quality_records", "find_graph_paths", "get_records"],
             explanation="The agent combines status filtering with inspection-to-NCR paths.",
+        ),
+        GoldScenario(
+            scenario_id="S-07",
+            title="IS 800 project evidence review",
+            question=(
+                "Compare this project's structural-steel practices with the indexed IS 800 "
+                "preview. What is evidenced, not evidenced, and needs review?"
+            ),
+            expected_route="agentic_rag",
+            expected_evidence_ids=[
+                "CODE-IS-800",
+                "PUBLIC-BIS-bis-800",
+                "SPEC-STEEL-01",
+                "MTC-01-01",
+                "WELD-001",
+            ],
+            expected_tools=["assess_standard_evidence"],
+            explanation=(
+                "One bounded standards tool compares only indexed public-preview topics with "
+                "permitted project evidence and states the preview limitation."
+            ),
         ),
     ]

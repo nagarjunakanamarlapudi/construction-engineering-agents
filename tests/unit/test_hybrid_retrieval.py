@@ -1,3 +1,5 @@
+import pytest
+
 from civil_copilot.data.models import DocumentChunk
 from civil_copilot.retrieval.hybrid import HybridRetriever, reciprocal_rank_fusion
 from civil_copilot.retrieval.query import QueryContext
@@ -28,6 +30,18 @@ def test_reciprocal_rank_fusion_matches_hand_derived_order():
     assert scores["B"] > scores["C"] > scores["A"] > scores["D"]
 
 
+def test_reciprocal_rank_fusion_counts_exact_identifier_as_its_own_signal():
+    scores = reciprocal_rank_fusion(
+        keyword_ids=["B", "C", "A"],
+        vector_ids=["B", "A", "C"],
+        exact_ids=["A"],
+        rank_constant=10,
+    )
+
+    assert list(scores)[0] == "A"
+    assert scores["A"] == pytest.approx(1 / 11 + 1 / 13 + 1 / 12)
+
+
 def test_hybrid_retriever_boosts_exact_ids_filters_access_and_reranks_current_revision():
     chunks = [
         _chunk("old", "RFI-087", "RFI-087 old response on drawing S-204", status="superseded"),
@@ -56,3 +70,8 @@ def test_hybrid_retriever_boosts_exact_ids_filters_access_and_reranks_current_re
     assert packet.evidence[0].rerank_score > packet.evidence[-1].rerank_score
     assert packet.retrieval_trace.keyword_candidates > 0
     assert packet.retrieval_trace.vector_candidates == 4
+    assert packet.retrieval_trace.reranker is not None
+    assert packet.retrieval_trace.reranker.provider == "deterministic"
+    assert packet.retrieval_trace.reranker.model == "exact_lexical_revision_heuristic"
+    assert packet.retrieval_trace.reranked_ranking[0] == "RFI-087"
+    assert packet.retrieval_trace.reranked_ranking.count("RFI-087") == 1

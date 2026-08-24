@@ -30,3 +30,13 @@ def test_explicit_route_override_is_honoured_without_adding_unsafe_tools():
 
     assert plan.route == "graph_rag"
     assert "delete_records" not in plan.tool_names
+
+
+def test_standard_to_project_comparison_routes_to_one_bounded_agent_investigation():
+    plan = _route(
+        "Compare this project's structural-steel practices with the indexed IS 800 preview. "
+        "What is evidenced, not evidenced, and needs review?"
+    )
+
+    assert plan.route == "agentic_rag"
+    assert "public preview" in plan.reason.lower()

@@ -5,7 +5,6 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
-
 DataOrigin = Literal["public_official", "synthetic_academic_demo"]
 RouteName = Literal["rag", "graph_rag", "agentic_rag"]
 
@@ -40,6 +39,7 @@ class DocumentChunk(BaseModel):
     source_path: str
     source_url: str | None = None
     access_scopes: list[str] = Field(min_length=1)
+    effective_date: date | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 

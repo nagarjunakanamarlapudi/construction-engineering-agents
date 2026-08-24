@@ -4,9 +4,14 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
-from typing import Protocol
+from datetime import date
+from typing import TYPE_CHECKING, Literal, Protocol
 
 from civil_copilot.data.models import DocumentChunk, ProjectRecord, Relationship
+
+if TYPE_CHECKING:
+    from civil_copilot.graph.service import GraphPath
+    from civil_copilot.retrieval.evidence import HybridCandidate
 
 
 def model_fingerprint(model: ProjectRecord | DocumentChunk | Relationship) -> str:
@@ -38,16 +43,59 @@ class RecordStore(Protocol):
     def count(self) -> int: ...
 
 
+class RecordReader(Protocol):
+    def query_records(
+        self,
+        *,
+        project_id: str,
+        access_scopes: list[str],
+        record_ids: list[str] | None = None,
+        record_types: list[str] | None = None,
+        statuses: list[str] | None = None,
+        as_of_date: date | None = None,
+        metadata_filters: dict[str, object] | None = None,
+        limit: int = 100,
+    ) -> list[ProjectRecord]: ...
+
+
 class SearchStore(Protocol):
     def upsert_chunks(self, chunks: list[DocumentChunk]) -> WriteStats: ...
 
     def count(self) -> int: ...
 
 
+class SearchReader(Protocol):
+    def search_hybrid(
+        self,
+        *,
+        query: str,
+        project_id: str,
+        access_scopes: list[str],
+        metadata_filters: dict[str, object] | None = None,
+        as_of_date: date | None = None,
+        limit: int = 20,
+    ) -> list[HybridCandidate]: ...
+
+
 class GraphStore(Protocol):
     def upsert_graph(
         self, records: list[ProjectRecord], relationships: list[Relationship]
     ) -> GraphWriteStats: ...
+
+
+class GraphReader(Protocol):
+    def find_paths(
+        self,
+        start_id: str,
+        *,
+        project_id: str,
+        access_scopes: list[str],
+        max_depth: int = 3,
+        direction: Literal["outgoing", "incoming", "both"] = "both",
+        relationship_types: set[str] | None = None,
+        as_of_date: date | None = None,
+        max_paths: int = 30,
+    ) -> list[GraphPath]: ...
 
 
 class InMemoryRecordStore:
@@ -69,6 +117,35 @@ class InMemoryRecordStore:
 
     def count(self) -> int:
         return len(self.records)
+
+    def query_records(
+        self,
+        *,
+        project_id: str,
+        access_scopes: list[str],
+        record_ids: list[str] | None = None,
+        record_types: list[str] | None = None,
+        statuses: list[str] | None = None,
+        as_of_date: date | None = None,
+        metadata_filters: dict[str, object] | None = None,
+        limit: int = 100,
+    ) -> list[ProjectRecord]:
+        if not access_scopes or limit < 1:
+            return []
+        permitted_scopes = set(access_scopes)
+        metadata_filters = metadata_filters or {}
+        visible = (
+            record
+            for record in self.records.values()
+            if record.project_id == project_id
+            and bool(permitted_scopes & set(record.access_scopes))
+            and (not record_ids or record.record_id in record_ids)
+            and (not record_types or record.record_type in record_types)
+            and (not statuses or record.status in statuses)
+            and (as_of_date is None or record.effective_date <= as_of_date)
+            and all(record.metadata.get(key) == value for key, value in metadata_filters.items())
+        )
+        return sorted(visible, key=lambda record: record.record_id)[:limit]
 
 
 class InMemorySearchStore:

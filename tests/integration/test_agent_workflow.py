@@ -76,6 +76,16 @@ def test_downstream_graph_question_uses_outgoing_paths_only():
     assert graph_event.details["arguments"]["direction"] == "outgoing"
 
 
+def test_downstream_graph_answer_cites_the_anchor_and_directly_affected_records():
+    response = _workflow().invoke(ChatRequest(question="What is downstream of RFI-087?"))
+
+    assert [citation.record_id for citation in response.citations] == [
+        "RFI-087",
+        "ACT-STEEL-009",
+        "DRAW-S-204-R5",
+    ]
+
+
 def test_direct_rag_exact_identifier_answer_does_not_add_unrelated_records():
     response = _workflow().invoke(ChatRequest(question="What did RFI-087 decide?"))
 

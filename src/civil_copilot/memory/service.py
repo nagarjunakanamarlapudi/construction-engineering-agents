@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Protocol
+from typing import Any, Protocol
 
 from mem0 import MemoryClient
 
@@ -20,6 +20,37 @@ class PreferenceBackend(Protocol):
     def put(self, user_id: str, project_id: str, preference_type: str, value: str) -> None: ...
 
     def list(self, user_id: str, project_id: str) -> dict[str, str]: ...
+
+
+class PreferenceIdIndex(Protocol):
+    """Map one application preference key to its Mem0-generated identifier."""
+
+    def get(self, user_id: str, project_id: str, preference_type: str) -> str | None: ...
+
+    def put(
+        self,
+        user_id: str,
+        project_id: str,
+        preference_type: str,
+        memory_id: str,
+    ) -> None: ...
+
+
+class InMemoryPreferenceIdIndex:
+    def __init__(self) -> None:
+        self.values: dict[tuple[str, str, str], str] = {}
+
+    def get(self, user_id: str, project_id: str, preference_type: str) -> str | None:
+        return self.values.get((user_id, project_id, preference_type))
+
+    def put(
+        self,
+        user_id: str,
+        project_id: str,
+        preference_type: str,
+        memory_id: str,
+    ) -> None:
+        self.values[(user_id, project_id, preference_type)] = memory_id
 
 
 class InMemoryPreferenceBackend:
@@ -43,20 +74,49 @@ class Mem0PreferenceBackend:
     def __init__(
         self,
         api_key: str,
+        preference_index: PreferenceIdIndex | None = None,
     ) -> None:
         self.client = MemoryClient(api_key=api_key)
+        self.preference_index = preference_index or InMemoryPreferenceIdIndex()
+
+    @staticmethod
+    def _metadata(project_id: str, preference_type: str, value: str) -> dict[str, str]:
+        return {
+            "memory_kind": "user_preference",
+            "project_id": project_id,
+            "preference_type": preference_type,
+            "preference_value": value,
+        }
+
+    @staticmethod
+    def _added_memory_id(response: Any) -> str:
+        if isinstance(response, dict) and isinstance(response.get("id"), str):
+            return response["id"]
+        results = response.get("results") if isinstance(response, dict) else None
+        if isinstance(results, list):
+            for result in results:
+                if isinstance(result, dict) and isinstance(result.get("id"), str):
+                    return result["id"]
+        raise RuntimeError("Mem0 add response did not contain a memory id")
 
     def put(self, user_id: str, project_id: str, preference_type: str, value: str) -> None:
-        self.client.add(
+        metadata = self._metadata(project_id, preference_type, value)
+        text = f"Preference {preference_type}: {value}"
+        memory_id = self.preference_index.get(user_id, project_id, preference_type)
+        if memory_id is not None:
+            self.client.update(memory_id, text=text, metadata=metadata)
+            return
+        response = self.client.add(
             [{"role": "user", "content": f"Preference {preference_type}: {value}"}],
             user_id=user_id,
-            metadata={
-                "memory_kind": "user_preference",
-                "project_id": project_id,
-                "preference_type": preference_type,
-                "preference_value": value,
-            },
+            metadata=metadata,
             infer=False,
+        )
+        self.preference_index.put(
+            user_id,
+            project_id,
+            preference_type,
+            self._added_memory_id(response),
         )
 
     def list(self, user_id: str, project_id: str) -> dict[str, str]:

@@ -93,5 +93,22 @@
     "question": "Which weld inspections raised NCRs, and which remain open pending reinspection?",
     "scenario_id": "S-06",
     "title": "Quality closure investigation"
+  },
+  {
+    "expected_evidence_ids": [
+      "CODE-IS-800",
+      "PUBLIC-BIS-bis-800",
+      "SPEC-STEEL-01",
+      "MTC-01-01",
+      "WELD-001"
+    ],
+    "expected_route": "agentic_rag",
+    "expected_tools": [
+      "assess_standard_evidence"
+    ],
+    "explanation": "One bounded standards tool compares only indexed public-preview topics with permitted project evidence and states the preview limitation.",
+    "question": "Compare this project's structural-steel practices with the indexed IS 800 preview. What is evidenced, not evidenced, and needs review?",
+    "scenario_id": "S-07",
+    "title": "IS 800 project evidence review"
   }
 ]

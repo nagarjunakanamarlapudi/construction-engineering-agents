@@ -45,8 +45,18 @@ class IngestionService:
         if missing_chunk_sources:
             raise ValueError(f"Chunks reference missing records: {missing_chunk_sources[:5]}")
 
+        records_by_id = {record.record_id: record for record in records}
+        publishable_chunks = [
+            chunk
+            if chunk.effective_date is not None
+            else chunk.model_copy(
+                update={"effective_date": records_by_id[chunk.record_id].effective_date}
+            )
+            for chunk in chunks
+        ]
+
         record_stats = self.records.upsert_records(records)
-        chunk_stats = self.search.upsert_chunks(chunks)
+        chunk_stats = self.search.upsert_chunks(publishable_chunks)
         graph_stats = self.graph.upsert_graph(records, relationships)
         return IngestionReport(
             records=record_stats,

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
+from civil_copilot.config import DEFAULT_API_BASE_URL
 from civil_copilot.retrieval.evidence import EvidencePacket
 
 
@@ -56,7 +57,7 @@ class GroundedAnswerService:
                     data_origin=chunk.data_origin,
                 )
             )
-            source = chunk.source_url or (f"http://127.0.0.1:8001/api/records/{chunk.record_id}")
+            source = chunk.source_url or (f"{DEFAULT_API_BASE_URL}/api/records/{chunk.record_id}")
             excerpt = chunk.text.strip()
             if len(excerpt) > 360:
                 excerpt = excerpt[:357].rsplit(" ", 1)[0] + "…"

@@ -13,7 +13,11 @@ from civil_copilot.data.loaders import load_corpus
 from civil_copilot.ingestion.service import IngestionService
 from civil_copilot.stores.neo4j import Neo4jGraphStore
 from civil_copilot.stores.postgres import PostgresRecordStore
-from civil_copilot.stores.qdrant import OpenAIEmbedding, QdrantSearchStore
+from civil_copilot.stores.qdrant import (
+    LIVE_QDRANT_COLLECTION,
+    OpenAIEmbedding,
+    QdrantSearchStore,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,6 +33,7 @@ def _stores(settings: Settings) -> tuple[PostgresRecordStore, QdrantSearchStore,
         str(settings.qdrant_url),
         embedding,
         api_key=settings.qdrant_api_key.get_secret_value() if settings.qdrant_api_key else None,
+        collection_name=LIVE_QDRANT_COLLECTION,
     )
     graph = Neo4jGraphStore(
         settings.neo4j_uri,

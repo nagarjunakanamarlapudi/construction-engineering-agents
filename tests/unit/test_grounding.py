@@ -39,7 +39,7 @@ def test_grounded_fallback_answer_has_clickable_citation_for_every_evidence_stat
     assert result.abstained is False
     assert result.citations[0].record_id == "RFI-087"
     assert "[RFI-087]" in result.answer
-    assert "http://127.0.0.1:8001/api/records/RFI-087" in result.answer
+    assert "http://127.0.0.1:8011/api/records/RFI-087" in result.answer
     assert result.unsupported_claims == []
 
 

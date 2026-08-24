@@ -42,21 +42,23 @@ Expected result:
 - the answer states that plate PL-17B was required and incorporated into S-204 Rev 5;
 - citation: RFI-087.
 
-Open **Plan & tool trace** and say:
+Open **Investigation details**, then **Plan & tool trace**, and say:
 
 > The model proposed a route, but a guardrail reduced this to the smallest sufficient path: one search. The display is a structured execution summary, not hidden chain-of-thought.
 
-Then open **Evidence & citations** to show the origin label and source link.
+Return to **Supporting evidence** to show the origin label and source link. Ranking details remain
+available in **Investigation details → Evidence & citations**.
 
 ## 3. Graph RAG — follow the impact — 75 seconds
 
-Open **Impact Explorer**, enter `RFI-087`, and run the downstream investigation.
+Open **Impact Explorer**, select `RFI-087`, and click **Run impact investigation**.
 
 Expected result:
 
-- verified paths starting at RFI-087;
-- connected drawing and activity records;
-- a visible path to ACT-STEEL-009 and subsequent schedule work.
+- a short **What we found** impact statement;
+- a plain-language **Why** explanation;
+- connected drawing and activity records under **What is affected**; and
+- cited sources, with all verified paths available in the collapsed technical section.
 
 Say:
 
@@ -73,6 +75,7 @@ Question:
 Expected result:
 
 - route: `Agentic RAG`;
+- a conclusion-first answer stating why the activity was blocked;
 - a bounded plan;
 - schedule activity lookup;
 - graph path traversal;
@@ -85,7 +88,8 @@ Say:
 
 ## 5. Revision & Evidence Lab — show a non-chat experience — 75 seconds
 
-Open **Revision & Evidence Lab** and compare S-204.
+Open **Revision & Evidence Lab** and select S-204. Review the two readable revision cards, then
+click **Explain this revision with evidence**.
 
 Expected result:
 
@@ -100,7 +104,8 @@ Say:
 
 ## 6. Quality Control Room — investigate closure evidence — 75 seconds
 
-Open **Quality Control Room** and run the quality investigation.
+Open **Quality Control Room**, review the open NCR cards, and click
+**Investigate open NCR closure chains**.
 
 Expected result:
 
@@ -113,7 +118,23 @@ Say:
 
 > This scenario demonstrates why connected data matters. The answer must join an NCR, the rejected inspection, the weld, and the required reinspection. The test suite protects this ordering so accepted welds cannot accidentally lead the answer.
 
-## 7. Memory — preferences, not project facts — 45 seconds
+## 7. Standards Evidence — compare without overclaiming — 75 seconds
+
+Stay in **Quality Control Room**, choose **IS 800:2007**, and click
+**Run standards evidence review**.
+
+Expected result:
+
+- the matrix separates `Evidenced`, `Needs review`, and `Not evidenced` topics;
+- every row cites synthetic project records and an official BIS preview chunk;
+- the tool trace shows one bounded `assess_standard_evidence` action; and
+- the page says plainly that a public preview cannot establish full compliance.
+
+Say:
+
+> This is an evidence comparison, not an engineering approval. The tool checks only the seven topics supported by the indexed IS 800 preview and our project records. Missing evidence means a reviewer should look for the record; it does not prove that the practice was not followed.
+
+## 8. Memory — preferences, not project facts — 45 seconds
 
 Open **Preference Memory** in the sidebar. Save `concise` as the answer style, then repeat a question.
 
@@ -127,7 +148,7 @@ Say:
 
 > Mem0 remembers how this reviewer prefers to see answers. It is deliberately blocked from storing project facts, retrieved passages, or old answers.
 
-## 8. Evaluation and observability — 60 seconds
+## 9. Evaluation and observability — 60 seconds
 
 Open the answer's **Evaluation** tab, then switch to Langfuse.
 
@@ -136,13 +157,13 @@ Show:
 - route and tool spans;
 - number of evidence items and citations;
 - latency and safe masked inputs;
-- the six-scenario evaluation report.
+- the seven-scenario evaluation report, including the IS 800 evidence comparison.
 
 Say:
 
 > A fluent answer is not enough. We test whether the correct evidence was retrieved, whether the route and tools were appropriate, whether every claim has a citation, and whether the system abstains when evidence is missing.
 
-## 9. Close — 30 seconds
+## 10. Close — 30 seconds
 
 > The main result is not a general chatbot. It is a reproducible investigation system over a connected, clearly labelled civil-engineering dataset: fast RAG for simple questions, Graph RAG for relationships, and bounded Agentic RAG for multi-step work.
 

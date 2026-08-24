@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import deque
+from datetime import date
 from typing import Literal
 
 import networkx as nx
@@ -27,6 +28,8 @@ class GraphEdge(BaseModel):
     relationship_type: str
     provenance: str
     confidence: float
+    method: str | None = None
+    valid_from: date | None = None
 
 
 class GraphPath(BaseModel):
@@ -74,6 +77,8 @@ class ProjectGraphService:
             relationship_type=link.relationship_type,
             provenance=link.provenance,
             confidence=link.confidence,
+            method=link.method,
+            valid_from=link.valid_from,
         )
 
     def find_paths(

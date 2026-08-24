@@ -11,7 +11,8 @@ COPY pyproject.toml uv.lock README.md ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY src ./src
 COPY data ./data
+COPY sql ./sql
 RUN uv sync --frozen --no-dev
 
-EXPOSE 8001
-CMD ["uv", "run", "uvicorn", "civil_copilot.api.main:app", "--host", "0.0.0.0", "--port", "8001"]
+EXPOSE 8011
+CMD ["uv", "run", "uvicorn", "civil_copilot.api.main:app", "--host", "0.0.0.0", "--port", "8011"]
