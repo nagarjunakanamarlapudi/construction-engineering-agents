@@ -39,6 +39,14 @@ Project information is distributed across systems and file formats, often with i
 
 The result is avoidable search time, slower issue resolution, weak organizational memory, and late discovery of project risk. The Copilot should reduce this burden without presenting model-generated advice as an authoritative engineering decision.
 
+### How a construction project fits together
+
+A building project moves from requirements and design through procurement, fabrication, site construction, quality control, and handover. Every stage produces records that later stages depend on. A single clarification can therefore change a drawing, affect a scheduled activity, require a new inspection, and alter the final handover evidence.
+
+![Construction project lifecycle from requirements and design through handover, with one connected evidence chain](docs/images/construction-project-lifecycle.png)
+
+The highlighted chain is the academic pilot's central example: an IS 800 reference connects to a design calculation, drawing S-204, RFI-087, activity ACT-STEEL-009, inspection or NCR evidence, and accepted work. The Copilot helps people find and connect these records; engineers and authorized project participants remain responsible for decisions and approvals.
+
 ## 3. Target Users
 
 | User | Primary need |

@@ -6,6 +6,7 @@ The master [proposal](../../PROPOSAL.md) uses the images in this directory to ex
 
 | File | Purpose |
 |---|---|
+| `construction-project-lifecycle.png` | Explain the construction lifecycle and the connected evidence chain before introducing any AI concepts |
 | `data-provenance-landscape.png` | Authoritative picture of public/downloaded, public/link-only, synthetic academic, and future authorized-project data |
 | `searchable-evidence-pipeline.png` | Shows the synthetic/public-preview inputs, PostgreSQL/Qdrant/Neo4j indexes, RAG/Graph RAG/ReAct use, and the Mem0 boundary |
 | `mockup-data-library.png` | Early interface concept for inspecting source, content boundary, academic-use label, and project applicability |
@@ -57,6 +58,10 @@ The four images were generated with the built-in image-generation tool in infogr
 ## Data-boundary and mockup generation prompts
 
 The images were generated with the built-in image-generation tool and visually checked before being copied into this directory.
+
+### Construction project lifecycle
+
+> Create a 16:9 hand-drawn whiteboard infographic titled “How a Construction Project Fits Together.” Show four stages: Requirements and design; Procurement and fabrication; Site construction and quality; and Handover. Under the stages, show the connected chain IS 800 reference → design calculation → S-204 drawing → RFI-087 → ACT-STEEL-009 → inspection / NCR → accepted work. Explain that one change can affect many records and that the Copilot connects information and cites evidence while people remain responsible for engineering and approval decisions. Use plain construction language and no AI jargon.
 
 ### Data provenance landscape
 
