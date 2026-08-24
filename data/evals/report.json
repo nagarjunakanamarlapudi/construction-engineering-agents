@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-24T02:31:22.547857+00:00",
+  "generated_at": "2026-08-24T18:27:45.775577+00:00",
   "scenario_count": 7,
   "aggregate": {
     "recall_at_6": 0.7547619047619047,

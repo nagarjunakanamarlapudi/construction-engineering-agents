@@ -1,6 +1,6 @@
 # Verification Report
 
-**Verified:** 23 August 2026
+**Verified:** 24 August 2026
 
 **Environment:** macOS host, Python 3.12, Docker Desktop, local PostgreSQL/Qdrant/Neo4j/Langfuse, configured OpenAI and managed Mem0
 
@@ -10,7 +10,7 @@ This file records what was actually executed for the current repository state. I
 
 | Area | Command / check | Result |
 |---|---|---|
-| Unit/integration/UI/operations contracts | `uv run pytest -q` | 250 passed, 7 live-service tests intentionally skipped in the default run |
+| Unit/integration/UI/operations contracts | `uv run pytest -q` | 253 passed, 7 live-service tests intentionally skipped in the default run |
 | Focused live database integration | `RUN_DATABASE_INTEGRATION=1 uv run pytest tests/integration/test_database_ingestion.py -q` | 1 passed against PostgreSQL, Qdrant, and Neo4j |
 | Formatting and lint | `make lint` | Ruff formatting and lint passed |
 | Code security | `make security` | Bandit: no issues; pip-audit: no known dependency vulnerabilities |
@@ -22,8 +22,9 @@ This file records what was actually executed for the current repository state. I
 | Service health | `make health` | PostgreSQL, Qdrant, Neo4j, and Langfuse reachable; required services healthy |
 | Docker exposure | Compose inspection | Published data/UI ports bind to `127.0.0.1`; supporting Langfuse stores have no host ports |
 | Container build | `docker build -t civil-copilot:verify .` | Successful image build |
-| Teaching notebooks | `make notebooks` | All seven notebooks executed first-to-last; Notebook 07 reused production code and ran the IS 800 scenario with one standards tool call |
-| Portable end to end | `make e2e` | 43 E2E/notebook/UI/API tests passed and all 7 evaluation scenarios passed |
+| Teaching notebooks | `make notebooks` | All eight notebooks executed first-to-last; Notebook 07 reused production code and ran the IS 800 scenario, while Notebook 08 ran a domain-neutral Mem0 lifecycle in RAM |
+| Mem0 primer live modes | Execute Notebook 08 with `MEM0_PRIMER_MODE=oss_openai`, then `MEM0_PRIMER_MODE=platform MEM0_PRIMER_CLEANUP=1` | Both completed with a 100% notebook evaluation rate; the Platform run deleted only the two memories created for its unique demo user |
+| Portable end to end | `make e2e` | 47 E2E/notebook/UI/API tests passed and all 7 evaluation scenarios passed |
 | Offline evaluation | `make eval` | All 7 scenarios passed |
 | Live stack integration | `make e2e-live` | Build, health, idempotent ingest, and 43 integration/E2E/UI/API tests passed (1 skipped); the final live model evaluation did not meet its gate because the configured OpenAI reranker timed out |
 | Browser-based standards review | Quality Control Room → Run standards evidence review | Seven readable evidence cards rendered with source labels and the preview limitation; the agent used only `assess_standard_evidence` and returned 19 citations |

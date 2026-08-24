@@ -83,7 +83,7 @@ The reproducible offline baseline passes all seven scenarios with 100% route acc
 - [Public data catalogue](docs/PUBLIC_DATA_CATALOG.md)
 - [Data foundation and provenance](docs/DATA_FOUNDATION.md)
 - [Deferred product backlog](docs/BACKLOG.md)
-- [Seven reusable notebooks](notebooks/)
+- [Eight reusable notebooks](notebooks/), including a domain-neutral Mem0 primer
 
 The notebooks import the same production modules used by the API and UI; they are small experiments, not a second implementation.
 

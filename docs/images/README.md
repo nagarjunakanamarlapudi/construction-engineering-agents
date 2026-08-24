@@ -42,6 +42,19 @@ These four images provide plain-language views for readers who may know neither 
 
 The full prompts and shared art direction are recorded in [Submission Proposal — Diagram Prompts](submission-visual-prompts.md).
 
+## Domain-neutral Mem0 primer set
+
+These four images belong to [`notebooks/08_mem0_primer.ipynb`](../../notebooks/08_mem0_primer.ipynb). They deliberately use ordinary application examples rather than construction data, so the notebook can be reused when evaluating Mem0 for other projects.
+
+| File | Purpose |
+|---|---|
+| `mem0-primer-mental-model.png` | Distinguish conversation history, durable memory, and an application's source of truth |
+| `mem0-primer-three-strategies.png` | Compare Mem0 extraction (`infer=True`), application-controlled storage (`infer=False`), and a hybrid approach |
+| `mem0-primer-lifecycle.png` | Show add, extract, search, use, update, history, and deletion as one memory lifecycle |
+| `mem0-primer-deployment-modes.png` | Compare the credential-free RAM lab, OSS with OpenAI, OSS with Ollama, and managed Mem0 Platform |
+
+The images were generated with the built-in image-generation tool in a neutral hand-drawn infographic style and then visually reviewed. Prompts requested a white 16:9 canvas, short plain-language labels, accurate directional arrows, no vendor logos, and no civil-engineering imagery.
+
 ### Submission-set visual language
 
 - Blue: collecting and preparing information

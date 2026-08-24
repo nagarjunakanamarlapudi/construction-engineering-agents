@@ -104,7 +104,7 @@ make notebooks
 
 - `make eval` is reproducible and can run without external model calls.
 - `make eval-live` uses configured OpenAI, Qdrant, Neo4j, Mem0 policy, and Langfuse tracing.
-- `make notebooks` executes all five teaching notebooks headlessly to prove they still match the production modules.
+- `make notebooks` executes all eight teaching notebooks headlessly. Notebooks 01–07 explain and exercise the Civil Engineering Project Copilot; Notebook 08 is a separate, domain-neutral Mem0 primer.
 
 ## Shutdown
 

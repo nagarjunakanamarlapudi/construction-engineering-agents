@@ -16,11 +16,15 @@ def test_teaching_notebooks_import_production_modules_without_install_cells():
         "05_evaluations.ipynb",
         "06_educational_toy_end_to_end.ipynb",
         "07_production_mirror_end_to_end.ipynb",
+        "08_mem0_primer.ipynb",
     ]
     for path in notebooks:
         notebook = nbformat.read(path, as_version=4)
         source = "\n".join(cell.source for cell in notebook.cells if cell.cell_type == "code")
-        if path.name != "06_educational_toy_end_to_end.ipynb":
+        if path.name not in {
+            "06_educational_toy_end_to_end.ipynb",
+            "08_mem0_primer.ipynb",
+        }:
             assert "civil_copilot" in source
         assert "pip install" not in source
         assert "%pip" not in source

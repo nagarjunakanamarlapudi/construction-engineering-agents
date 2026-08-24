@@ -64,6 +64,7 @@ select = ["E", "F", "I", "B", "UP", "S"]
 ignore = ["S101"]
 
 [tool.ruff.lint.per-file-ignores]
+"scripts/build_mem0_primer_notebook.py" = ["E501"]
 "src/civil_copilot/data/synthetic.py" = ["E501"]
 "tests/test_public_standards_ingest.py" = ["E501", "S603"]
 "tests/unit/test_tracing_policy.py" = ["S105"]
