@@ -104,7 +104,23 @@ make notebooks
 
 - `make eval` is reproducible and can run without external model calls.
 - `make eval-live` uses configured OpenAI, Qdrant, Neo4j, Mem0 policy, and Langfuse tracing.
-- `make notebooks` executes all eight teaching notebooks headlessly. Notebooks 01–07 explain and exercise the Civil Engineering Project Copilot; Notebook 08 is a separate, domain-neutral Mem0 primer.
+- `make notebooks` executes all ten teaching notebooks headlessly. Notebooks 01–07 explain and exercise the Civil Engineering Project Copilot; Notebook 08 is a domain-neutral Mem0 primer; Notebook 09 covers LangChain/LangGraph state, memory, checkpoints, and human review; Notebook 10 visualizes middleware across the complete agent lifecycle.
+
+Notebook 09 defaults to the credential-free model-free path. Its optional provider paths can be launched with:
+
+```bash
+STATE_MEMORY_PRIMER_MODE=ollama_gemma4 uv run jupyter lab notebooks/09_langchain_langgraph_state_memory_primer.ipynb
+STATE_MEMORY_PRIMER_MODE=openai uv run jupyter lab notebooks/09_langchain_langgraph_state_memory_primer.ipynb
+```
+
+The Ollama path expects `gemma4:e4b`. Set `STATE_MEMORY_PRIMER_AUTO_REVIEW=1` only for a disposable demonstration where the pending in-memory tool action should be automatically approved and resumed.
+
+Notebook 10 also defaults to a credential-free deterministic model while still using real `create_agent()`, tools, and middleware. Its optional provider paths are:
+
+```bash
+MIDDLEWARE_PRIMER_MODE=ollama_gemma4 uv run jupyter lab notebooks/10_langchain_middleware_primer.ipynb
+MIDDLEWARE_PRIMER_MODE=openai uv run jupyter lab notebooks/10_langchain_middleware_primer.ipynb
+```
 
 ## Shutdown
 

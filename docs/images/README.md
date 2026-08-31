@@ -55,6 +55,28 @@ These four images belong to [`notebooks/08_mem0_primer.ipynb`](../../notebooks/0
 
 The images were generated with the built-in image-generation tool in a neutral hand-drawn infographic style and then visually reviewed. Prompts requested a white 16:9 canvas, short plain-language labels, accurate directional arrows, no vendor logos, and no civil-engineering imagery.
 
+## Domain-neutral LangChain/LangGraph state and memory primer set
+
+These four images belong to [`notebooks/09_langchain_langgraph_state_memory_primer.ipynb`](../../notebooks/09_langchain_langgraph_state_memory_primer.ipynb). They explain framework boundaries using ordinary application examples rather than construction data.
+
+| File | Purpose |
+|---|---|
+| `state-memory-primer-mental-model.png` | Separate working state, thread checkpoints, and selected cross-thread memory |
+| `state-memory-primer-thread-boundaries.png` | Show same-thread continuation, different-thread isolation, and trusted user namespaces |
+| `state-memory-primer-hitl-lifecycle.png` | Show interrupt, saved checkpoint, approve/edit/reject, resume, and the pre-side-effect safety barrier |
+| `state-memory-primer-execution-modes.png` | Compare model-free, local Gemma 4, and OpenAI modes over one shared memory architecture |
+
+The images were generated with the built-in image-generation tool in scientific-educational infographic mode. Each prompt required a solid white 16:9 canvas, domain-neutral language, readable marker typography, accurate arrows, and no vendor logos or watermarks. Final files were visually reviewed before being placed here.
+
+## Domain-neutral LangChain middleware primer set
+
+These two vector diagrams belong to [`notebooks/10_langchain_middleware_primer.ipynb`](../../notebooks/10_langchain_middleware_primer.ipynb). Exact framework hook names are rendered as deterministic SVG text so they remain crisp and accurate in GitHub and Jupyter.
+
+| File | Purpose |
+|---|---|
+| `middleware-agent-lifecycle.svg` | Show the once-per-run agent hooks, repeating model hooks, wrapped tool execution, and the return to the model loop |
+| `middleware-capability-map.svg` | Group middleware uses into observing, shaping context, protecting, recovering, bounding, and managing history |
+
 ### Submission-set visual language
 
 - Blue: collecting and preparing information

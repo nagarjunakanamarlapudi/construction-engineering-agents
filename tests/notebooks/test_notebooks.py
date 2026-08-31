@@ -17,6 +17,8 @@ def test_teaching_notebooks_import_production_modules_without_install_cells():
         "06_educational_toy_end_to_end.ipynb",
         "07_production_mirror_end_to_end.ipynb",
         "08_mem0_primer.ipynb",
+        "09_langchain_langgraph_state_memory_primer.ipynb",
+        "10_langchain_middleware_primer.ipynb",
     ]
     for path in notebooks:
         notebook = nbformat.read(path, as_version=4)
@@ -24,6 +26,8 @@ def test_teaching_notebooks_import_production_modules_without_install_cells():
         if path.name not in {
             "06_educational_toy_end_to_end.ipynb",
             "08_mem0_primer.ipynb",
+            "09_langchain_langgraph_state_memory_primer.ipynb",
+            "10_langchain_middleware_primer.ipynb",
         }:
             assert "civil_copilot" in source
         assert "pip install" not in source

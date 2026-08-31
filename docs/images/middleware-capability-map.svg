@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Middleware capability map</title>
+  <desc id="desc">Six middleware capability groups: observe, shape context, protect, recover, bound, and manage history.</desc>
+  <defs>
+    <filter id="shadow2" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#94a3b8" flood-opacity="0.25"/></filter>
+    <style>
+      .title{font:700 42px system-ui,sans-serif;fill:#0f172a}.sub{font:22px system-ui,sans-serif;fill:#475569}
+      .head{font:700 27px system-ui,sans-serif;fill:#0f172a}.body{font:19px system-ui,sans-serif;fill:#334155}.code{font:17px ui-monospace,SFMono-Regular,monospace;fill:#334155}
+      .card{stroke-width:3;rx:22;filter:url(#shadow2)}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#f8fafc"/>
+  <text x="800" y="65" text-anchor="middle" class="title">What Middleware Can Do</text>
+  <text x="800" y="102" text-anchor="middle" class="sub">Choose the smallest middleware that protects or improves one clear boundary</text>
+
+  <g transform="translate(90 155)">
+    <rect width="430" height="245" class="card" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="30" y="52" class="head">1 · Observe</text><text x="30" y="90" class="body">Logging, traces, timing, usage</text>
+    <text x="30" y="135" class="code">before_agent · after_agent</text><text x="30" y="170" class="code">wrap_model_call</text>
+  </g>
+  <g transform="translate(585 155)">
+    <rect width="430" height="245" class="card" fill="#ede9fe" stroke="#7c3aed"/>
+    <text x="30" y="52" class="head">2 · Shape context</text><text x="30" y="90" class="body">Dynamic prompts, models, tools</text>
+    <text x="30" y="135" class="code">dynamic_prompt</text><text x="30" y="170" class="code">wrap_model_call</text>
+  </g>
+  <g transform="translate(1080 155)">
+    <rect width="430" height="245" class="card" fill="#fee2e2" stroke="#dc2626"/>
+    <text x="30" y="52" class="head">3 · Protect</text><text x="30" y="90" class="body">PII handling and human approval</text>
+    <text x="30" y="135" class="code">PIIMiddleware</text><text x="30" y="170" class="code">HumanInTheLoopMiddleware</text>
+  </g>
+  <g transform="translate(90 475)">
+    <rect width="430" height="245" class="card" fill="#dcfce7" stroke="#16a34a"/>
+    <text x="30" y="52" class="head">4 · Recover</text><text x="30" y="90" class="body">Retries, safe errors, fallback models</text>
+    <text x="30" y="135" class="code">ToolRetryMiddleware</text><text x="30" y="170" class="code">ModelFallbackMiddleware</text>
+  </g>
+  <g transform="translate(585 475)">
+    <rect width="430" height="245" class="card" fill="#ffedd5" stroke="#ea580c"/>
+    <text x="30" y="52" class="head">5 · Bound</text><text x="30" y="90" class="body">Stop runaway model and tool loops</text>
+    <text x="30" y="135" class="code">ModelCallLimitMiddleware</text><text x="30" y="170" class="code">ToolCallLimitMiddleware</text>
+  </g>
+  <g transform="translate(1080 475)">
+    <rect width="430" height="245" class="card" fill="#cffafe" stroke="#0891b2"/>
+    <text x="30" y="52" class="head">6 · Manage history</text><text x="30" y="90" class="body">Compress older conversation context</text>
+    <text x="30" y="135" class="code">SummarizationMiddleware</text><text x="30" y="170" class="code">ContextEditingMiddleware</text>
+  </g>
+
+  <rect x="250" y="790" width="1100" height="65" rx="18" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="800" y="831" text-anchor="middle" class="body">Middleware is cross-cutting behavior. Business logic still belongs in tools and application services.</text>
+</svg>

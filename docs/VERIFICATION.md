@@ -1,6 +1,6 @@
 # Verification Report
 
-**Verified:** 24 August 2026
+**Verified:** 27 August 2026
 
 **Environment:** macOS host, Python 3.12, Docker Desktop, local PostgreSQL/Qdrant/Neo4j/Langfuse, configured OpenAI and managed Mem0
 
@@ -10,7 +10,7 @@ This file records what was actually executed for the current repository state. I
 
 | Area | Command / check | Result |
 |---|---|---|
-| Unit/integration/UI/operations contracts | `uv run pytest -q` | 253 passed, 7 live-service tests intentionally skipped in the default run |
+| Unit/integration/UI/operations contracts | `uv run pytest -q` | 256 passed, 7 live-service tests intentionally skipped in the default run |
 | Focused live database integration | `RUN_DATABASE_INTEGRATION=1 uv run pytest tests/integration/test_database_ingestion.py -q` | 1 passed against PostgreSQL, Qdrant, and Neo4j |
 | Formatting and lint | `make lint` | Ruff formatting and lint passed |
 | Code security | `make security` | Bandit: no issues; pip-audit: no known dependency vulnerabilities |
@@ -22,8 +22,10 @@ This file records what was actually executed for the current repository state. I
 | Service health | `make health` | PostgreSQL, Qdrant, Neo4j, and Langfuse reachable; required services healthy |
 | Docker exposure | Compose inspection | Published data/UI ports bind to `127.0.0.1`; supporting Langfuse stores have no host ports |
 | Container build | `docker build -t civil-copilot:verify .` | Successful image build |
-| Teaching notebooks | `make notebooks` | All eight notebooks executed first-to-last; Notebook 07 reused production code and ran the IS 800 scenario, while Notebook 08 ran a domain-neutral Mem0 lifecycle in RAM |
+| Teaching notebooks | `make notebooks` | All ten notebooks executed first-to-last; Notebook 08 ran its domain-neutral Mem0 lifecycle, Notebook 09 ran state/checkpoint/store/HITL, and Notebook 10 ran the exact middleware lifecycle plus retry, fallback, limits, PII, summarization, and approval examples |
 | Mem0 primer live modes | Execute Notebook 08 with `MEM0_PRIMER_MODE=oss_openai`, then `MEM0_PRIMER_MODE=platform MEM0_PRIMER_CLEANUP=1` | Both completed with a 100% notebook evaluation rate; the Platform run deleted only the two memories created for its unique demo user |
+| LangChain/LangGraph primer live modes | Execute Notebook 09 in `model_free`, `ollama_gemma4`, and `openai` modes with automatic review enabled only for the two disposable live demonstrations | All three completed with a 100% notebook evaluation rate; OpenAI and local `gemma4:e4b` each proposed `save_preference`, paused in `HumanInTheLoopMiddleware`, resumed after approval, and confirmed the tool write |
+| Middleware primer execution modes | Execute Notebook 10 in `model_free`, `ollama_gemma4`, and `openai` modes with automatic approval of the disposable simulated action | All three completed without cell errors and with a 100% middleware evaluation rate; the model-free path produced the exact 12-stage hook sequence, while local Gemma 4 and OpenAI each completed the real provider-backed tool loop |
 | Portable end to end | `make e2e` | 47 E2E/notebook/UI/API tests passed and all 7 evaluation scenarios passed |
 | Offline evaluation | `make eval` | All 7 scenarios passed |
 | Live stack integration | `make e2e-live` | Build, health, idempotent ingest, and 43 integration/E2E/UI/API tests passed (1 skipped); the final live model evaluation did not meet its gate because the configured OpenAI reranker timed out |
